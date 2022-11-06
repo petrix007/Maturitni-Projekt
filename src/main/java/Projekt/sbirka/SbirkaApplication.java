@@ -13,5 +13,4 @@ import org.springframework.stereotype.Controller;
 public class SbirkaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SbirkaApplication.class, args);
-
 }}

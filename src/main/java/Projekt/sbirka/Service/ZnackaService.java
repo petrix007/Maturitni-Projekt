@@ -1,6 +1,7 @@
 package Projekt.sbirka.Service;
 import java.util.ArrayList;
 import java.util.List;
+
 import Projekt.sbirka.Entity.Znacka;
 import Projekt.sbirka.Repository.ZnackaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

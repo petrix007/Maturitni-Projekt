@@ -29,5 +29,4 @@ public class Znacka {
     public void setPopis(String popis) {
         this.popis = popis;
     }
-
 }

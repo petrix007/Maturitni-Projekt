@@ -30,5 +30,4 @@ public class Znacka {
         this.popis = popis;
     }
 
-
 }

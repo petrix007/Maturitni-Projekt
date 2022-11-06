@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 @ComponentScan()
 @SpringBootApplication
 public class SbirkaApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SbirkaApplication.class, args);
 

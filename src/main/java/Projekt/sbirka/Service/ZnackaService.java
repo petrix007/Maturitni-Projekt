@@ -24,4 +24,5 @@ public class ZnackaService {
     public void deleteZnackaById(int id) {
         repository.deleteById(id);
     }
+
 }

@@ -37,4 +37,5 @@ public class ZnackaController {
     public void updateZnacka(@RequestBody Znacka znacka) {
         znackaService.saveOrUpdate(znacka);
     }
+
 }

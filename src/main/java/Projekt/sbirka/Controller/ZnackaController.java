@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/znck")
+@RequestMapping(path = "/sbrk")
 public class ZnackaController {
     @Autowired
     ZnackaService znackaService;

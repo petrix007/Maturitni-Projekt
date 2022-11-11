@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/prs")
+@RequestMapping(path = "/sbrk")
 public class ParamsController {
     @Autowired
     ParamsService paramsService;

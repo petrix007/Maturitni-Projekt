@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/Mdy")
+@RequestMapping(path = "/sbrk")
 public class ModelyController {
     @Autowired
     ModelyService modelyService;

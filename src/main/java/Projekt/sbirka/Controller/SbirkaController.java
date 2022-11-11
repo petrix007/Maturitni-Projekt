@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/sbk")
+@RequestMapping(path = "/sbrk")
 public class SbirkaController {
     @Autowired
     SbirkaService sbirkaService;

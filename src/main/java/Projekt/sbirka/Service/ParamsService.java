@@ -16,7 +16,7 @@ public class ParamsService {
         return repository.findById(id).get();
     }
     public List<Params> getAllParams(){
-        List<Params> params = new ArrayList<Params>();
+        List<Params> params = new ArrayList();
         repository.findAll().forEach(Params -> params.add(Params));
         return params;
     }

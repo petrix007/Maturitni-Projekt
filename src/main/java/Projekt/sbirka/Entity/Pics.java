@@ -9,6 +9,8 @@ public class Pics {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
+    private int model_pic;
+    @Column
     private String obr;
     @Column
     private String popis;
@@ -20,6 +22,15 @@ public class Pics {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getModel_pic() {
+        return model_pic;
+    }
+
+    public void setModel_pic(int model_pic) {
+        this.model_pic = model_pic;
+    }
+
 
     public String getObr() {
         return obr;

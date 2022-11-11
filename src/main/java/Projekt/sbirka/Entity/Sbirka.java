@@ -10,11 +10,11 @@ public class Sbirka {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
+    private int user_id;
+    @Column
     private Date zalozeno;
     @Column
     private String popis;
-    @Column
-    private int model_id;
 
     public int getId() {
         return id;
@@ -22,6 +22,14 @@ public class Sbirka {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public Date getZalozeno() {
@@ -39,14 +47,5 @@ public class Sbirka {
     public void setPopis(String popis) {
         this.popis = popis;
     }
-
-    public int getModel_id() {
-        return model_id;
-    }
-
-    public void setModel_id(int model_id) {
-        this.model_id = model_id;
-    }
-
 
 }

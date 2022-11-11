@@ -1,9 +1,7 @@
 package Projekt.sbirka.Service;
 
 import Projekt.sbirka.Entity.Modely;
-import Projekt.sbirka.Entity.Params;
 import Projekt.sbirka.Repository.ModelyRepository;
-import Projekt.sbirka.Repository.ParamsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -14,20 +14,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Projekt.sbirka.UI.UIController">
    <children>
-      <BorderPane layoutY="112.0" prefHeight="488.0" prefWidth="202.0" style="-fx-background-color: #0598FF;" AnchorPane.leftAnchor="0.0">
+      <BorderPane prefHeight="600.0" prefWidth="202.0" style="-fx-background-color: #0598FF;" AnchorPane.leftAnchor="0.0">
          <top>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button alignment="BASELINE_CENTER" mnemonicParsing="false" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Menu" textFill="WHITE">
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@Images/ikona1.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets left="50.0" top="30.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <Button fx:id="menuBtn" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Menu" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@Images/menu-burger%20(1).png" />
+                              <Image url="@Images/menu_stripes.png" />
                            </image>
                            <effect>
                               <ColorAdjust brightness="1.0" contrast="1.0" />
@@ -37,8 +45,11 @@
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
                   </Button>
-                  <Button alignment="BASELINE_CENTER" mnemonicParsing="false" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat" textFill="WHITE">
+                  <Button fx:id="pridatBtn" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -53,7 +64,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Button>
-                  <Button alignment="BASELINE_CENTER" mnemonicParsing="false" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Sbírky" textFill="WHITE">
+                  <Button alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Sbírky" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -72,7 +83,7 @@
             </VBox>
          </top>
          <bottom>
-            <Button alignment="BOTTOM_CENTER" mnemonicParsing="false" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přihlásit se" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Button fx:id="loginBtn" alignment="BOTTOM_CENTER" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přihlásit se" textFill="WHITE" BorderPane.alignment="CENTER">
                <graphic>
                   <ImageView cacheHint="SPEED" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -96,21 +107,56 @@
             </Button>
          </bottom>
       </BorderPane>
-      <BorderPane prefHeight="113.0" prefWidth="800.0" style="-fx-background-color: #343090;">
+      <BorderPane layoutX="202.0" prefHeight="113.0" prefWidth="598.0" style="-fx-background-color: #343090;">
          <left>
-            <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" translateX="50.0" BorderPane.alignment="CENTER_LEFT">
-               <image>
-                  <Image url="@Images/ikona1.png" />
-               </image>
+            <Text fx:id="titleTxt" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="MENU" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
                <BorderPane.margin>
-                  <Insets />
+                  <Insets left="50.0" />
                </BorderPane.margin>
-            </ImageView>
+            </Text>
          </left>
       </BorderPane>
       <StackPane layoutX="202.0" layoutY="112.0" prefHeight="488.0" prefWidth="606.0">
          <children>
-            <BorderPane prefHeight="488.0" prefWidth="595.0">
+            <BorderPane fx:id="pridat" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <top>
+                  <VBox fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="67.0" prefWidth="300.0" style="-fx-background-color: #0598FF;" text="Přidat značku" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="150.0" top="50.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="300.0" style="-fx-background-color: #0598FF;" text="Přidat sbírku" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="150.0" top="50.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="300.0" style="-fx-background-color: #0598FF;" text="Přidat model" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="150.0" top="50.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="50.0" />
+                     </padding>
+                  </VBox>
+               </top>
+            </BorderPane>
+            <BorderPane fx:id="login" prefHeight="488.0" prefWidth="595.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox fillWidth="false" prefHeight="220.0" prefWidth="606.0" spacing="40.0" BorderPane.alignment="BOTTOM_CENTER">
                      <children>
@@ -162,7 +208,7 @@
                <top>
                   <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                      <image>
-                        <Image url="@Images/comment-user%20(1).png" />
+                        <Image url="@Images/usericon.png" />
                      </image>
                      <BorderPane.margin>
                         <Insets left="-15.0" top="50.0" />
@@ -170,6 +216,7 @@
                   </ImageView>
                </top>
             </BorderPane>
+            <BorderPane fx:id="menu" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" />
          </children>
       </StackPane>
    </children>

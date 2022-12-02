@@ -20,6 +20,10 @@
     -fx-border-width: 0px 10px 0px 0px;
     -fx-font-size: 25px;
 }
+.text-field {
+    -fx-border-color : #0598FF;
+    -fx-border-width: 2px;
+}
 /*COMBOBOX*/
 .combo-box {
      -fx-border-color: #6F5CC2;

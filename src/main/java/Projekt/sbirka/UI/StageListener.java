@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -38,7 +39,9 @@ public class StageListener implements ApplicationListener<Projekt.sbirka.UI.Stag
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.setTitle(this.applicationTitle);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
         }
         catch(IOException e) {

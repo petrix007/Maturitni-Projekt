@@ -1,4 +1,4 @@
-package Projekt.sbirka.UI;
+package Projekt.sbirka;
 
 import javafx.application.Application;
 import javafx.application.HostServices;

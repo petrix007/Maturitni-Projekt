@@ -1,9 +1,10 @@
-package Projekt.sbirka.UI;
+package Projekt.sbirka;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -15,7 +16,7 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
-public class StageListener implements ApplicationListener<Projekt.sbirka.UI.StageReadyEvent> {
+public class StageListener implements ApplicationListener<StageReadyEvent> {
     private final String applicationTitle;
     private final Resource fxml;
     private final ApplicationContext ac;
@@ -38,7 +39,17 @@ public class StageListener implements ApplicationListener<Projekt.sbirka.UI.Stag
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.setTitle(this.applicationTitle);
+            stage.initStyle(StageStyle.UNDECORATED);
+            root.setOnMousePressed (evt ->{
+                x.set(evt.getSceneX());
+                y.set(evt.getSceneY());
+            });
+            root.setOnMouseDragged(evt ->{
+                stage.setX(evt.getScreenX()- x.get());
+                stage.setY(evt.getScreenY()- y.get());
+            });
             stage.show();
         }
         catch(IOException e) {

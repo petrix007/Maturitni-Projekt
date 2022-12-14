@@ -11,21 +11,25 @@
 .button:pressed
 {
 -fx-background-color : #5ec9ff;
+-fx-border-color: white;
 -fx-border-width: 0px 10px 0px 0px;
 -fx-font-size: 25px;
 }
 .button: focused {
-    -fx-background-color: #00CCFF;
-    -fx-border-color: #f7f7f7;
-    -fx-border-width: 0px 10px 0px 0px;
-    -fx-font-size: 25px;
+-fx-background-color: #00CCFF;
+-fx-border-color: #f7f7f7;
+-fx-border-width: 0px 10px 0px 0px;
+-fx-font-size: 25px;
 }
-.text-field {
-    -fx-border-color : #0598FF;
-    -fx-border-width: 2px;
+.text-field
+{
+-fx-border-color : #0598FF;
+-fx-border-width: 2px;
 }
+
 /*COMBOBOX*/
-.combo-box {
+.combo-box
+{
      -fx-border-color: #6F5CC2;
      -fx-border-width: 2;
      -fx-background-radius: 0;

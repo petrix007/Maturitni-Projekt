@@ -299,6 +299,37 @@
                   </VBox>
                </center>
             </BorderPane>
+            <BorderPane fx:id="sbirky" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <top>
+                  <TextField fx:id="searchSbirkaField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat sbírku" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets left="-70.0" top="5.0" />
+                     </BorderPane.margin>
+                  </TextField>
+               </top>
+               <right>
+                  <Button fx:id="searchSbirkaBtn" mnemonicParsing="false" text="🔍" BorderPane.alignment="TOP_LEFT">
+                     <BorderPane.margin>
+                        <Insets right="150.0" top="-25.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </right></BorderPane>
+            <BorderPane fx:id="modely" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <top>
+                  <TextField fx:id="searchModelsField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets left="-70.0" top="5.0" />
+                     </BorderPane.margin>
+                  </TextField>
+               </top>
+               <right>
+                  <Button fx:id="searchModelBtn" mnemonicParsing="false" text="🔍" BorderPane.alignment="TOP_LEFT">
+                     <BorderPane.margin>
+                        <Insets right="150.0" top="-25.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </right>
+            </BorderPane>
             <BorderPane fx:id="login" prefHeight="488.0" prefWidth="595.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox fillWidth="false" prefHeight="220.0" prefWidth="606.0" spacing="40.0" BorderPane.alignment="BOTTOM_CENTER">
@@ -365,18 +396,28 @@
                   </ImageView>
                </top>
             </BorderPane>
-            <BorderPane fx:id="sbirky" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" />
             <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <center>
-                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Prezdivka: none">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Počet Sbírek: none">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Počet Modelů: none">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                </center>
-               <top>
-                  <Label fx:id="userLabel" text="none" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </top>
                <bottom>
                   <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOutUser" style="-fx-background-color: #ff5252;" text="ODHLÁSIT SE" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
                      <BorderPane.margin>

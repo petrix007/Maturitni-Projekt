@@ -1,15 +1,22 @@
 package Projekt.sbirka;
-
 import Projekt.sbirka.Entity.Sbirka;
 import Projekt.sbirka.Entity.Users;
+import Projekt.sbirka.Repository.SbirkaRepository;
+import Projekt.sbirka.Repository.UsersRepository;
 import Projekt.sbirka.Service.SbirkaService;
 import Projekt.sbirka.Service.UsersService;
+import Projekt.sbirka.Service.ZnackaService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -19,9 +26,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+import java.awt.*;
 import java.net.URL;
 import java.sql.Date;
 import java.text.ParseException;
@@ -29,16 +39,24 @@ import java.util.ResourceBundle;
 
 @Component
 public class UIController implements Initializable {
-    public boolean loggedIn = false;
+    boolean loggedIn = false;
     @Autowired
     UsersService usersService;
     @Autowired
+    UsersRepository usersRepository;
+    @Autowired
     SbirkaService sbirkaService;
+    @Autowired
+    SbirkaRepository sbirkaRepository;
     @FXML
     private Button createAcc;
 
     @FXML
     private ImageView exitBtn;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Button logOutBtn;
 
     @FXML
     private BorderPane loggedUser;
@@ -60,6 +78,9 @@ public class UIController implements Initializable {
 
     @FXML
     private ImageView minimalizeBtn;
+
+    @FXML
+    private BorderPane modely;
 
     @FXML
     private PasswordField passwordField;
@@ -92,16 +113,27 @@ public class UIController implements Initializable {
     private Button sbirkyBtn;
 
     @FXML
+    private Button searchModelBtn;
+
+    @FXML
+    private TextField searchModelsField;
+
+    @FXML
+    private Button searchSbirkaBtn;
+
+    @FXML
+    private TextField searchSbirkaField;
+
+    @FXML
     private BorderPane titleColor;
 
     @FXML
     private Text titleTxt;
 
-    @FXML
-    private Label userLabel;
 
     @FXML
     private TextField usernameField;
+
 
     @FXML
     private Button vybratObrBtn;
@@ -122,7 +154,7 @@ public class UIController implements Initializable {
         mini.setIconified(true);
     }
 
-    public void Exit(MouseEvent event) {
+    public void Exit(javafx.scene.input.MouseEvent event) {
         System.exit(40);
     }
 
@@ -200,21 +232,21 @@ public class UIController implements Initializable {
         if (actionEvent.getSource() == createAcc){
             Users users = new Users();
             //try{
-                users.setUsername(usernameField.getText());
-                System.out.println(usernameField.getText());
-                users.setPassword(passwordField.getText());
-                System.out.println(passwordField.getText());
-                usersService.saveOrUpdate(users);
-                System.out.println(asJson(usersService.getAllUsers()));
-                logIn();
+            users.setUsername(usernameField.getText());
+            System.out.println(usernameField.getText());
+            users.setPassword(passwordField.getText());
+            System.out.println(passwordField.getText());
+            usersService.saveOrUpdate(users);
+            System.out.println(asJson(usersService.getAllUsers()));
+            logIn();
             //}
             //catch (Exception e){
-                //if (usernameField.getText() == null){
-                //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: USERNAME.");
-                //}
-                //if (passwordField.getText() == null){
-                //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: PASSWORD.");
-                //}
+            //if (usernameField.getText() == null){
+            //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: USERNAME.");
+            //}
+            //if (passwordField.getText() == null){
+            //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: PASSWORD.");
+            //}
             //}
         }
     }
@@ -229,7 +261,11 @@ public class UIController implements Initializable {
             System.out.println("Login was succesfull");
             System.out.println("Id usera: " + UsersID());
             loginBtn.setText(UsersUsername());
-            userLabel.setText("Přezdívka: " + UsersUsername());
+            usernameLabel.setText("Přezdívka: " + UsersUsername());
+            //userModelyLabel.setText("Počet modelů: " + 0);
+            //userSbirkyLabel.setText("Počet sbírek: " + 0);
+
+
             loggedIn = true;
             // DODĚLAT CELKOVÝ POČET SBÍREK / MODELŮ
             loggedUser.toFront();

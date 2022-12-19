@@ -1,5 +1,6 @@
 package Projekt.sbirka;
 
+import Projekt.sbirka.StageReadyEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
-public class StageListener implements ApplicationListener<StageReadyEvent> {
+public class StageListener implements ApplicationListener<Projekt.sbirka.StageReadyEvent> {
     private final String applicationTitle;
     private final Resource fxml;
     private final ApplicationContext ac;

@@ -1,5 +1,7 @@
 package Projekt.sbirka.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,12 +11,21 @@ public class Sbirka {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users users_id;
     @Column
-    private int user_id;
-    @Column
-    private Date zalozeno;
+    private String zalozeno;
     @Column
     private String popis;
+    @JsonProperty("user_id")
+    public Users getUsers_id() {
+        return users_id;
+    }
+
+    public void setUsers_id(Users users_id) {
+        this.users_id = users_id;
+    }
 
     public int getId() {
         return id;
@@ -23,20 +34,11 @@ public class Sbirka {
     public void setId(int id) {
         this.id = id;
     }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public Date getZalozeno() {
+    public String getZalozeno() {
         return zalozeno;
     }
 
-    public void setZalozeno(Date zalozeno) {
+    public void setZalozeno(String zalozeno) {
         this.zalozeno = zalozeno;
     }
 

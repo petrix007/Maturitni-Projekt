@@ -7,6 +7,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
@@ -16,6 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -35,7 +37,7 @@
                         <Insets left="60.0" top="30.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Button fx:id="menuBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Menu" textFill="WHITE">
+                  <Button fx:id="menuBtn" alignment="BASELINE_LEFT" disable="true" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Menu" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -53,7 +55,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="pridatSbirkuBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat Sbírku" textFill="WHITE">
+                  <Button fx:id="pridatSbirkuBtn" alignment="BASELINE_LEFT" disable="true" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat Sbírku" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -68,7 +70,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Button>
-                  <Button fx:id="pridatModelbtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat Model" textFill="WHITE">
+                  <Button fx:id="pridatModelbtn" alignment="BASELINE_LEFT" disable="true" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Přidat Model" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -83,7 +85,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Button>
-                  <Button fx:id="sbirkyBtn" alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Sbírky" textFill="WHITE">
+                  <Button fx:id="sbirkyBtn" alignment="BASELINE_LEFT" disable="true" mnemonicParsing="false" onAction="#handleClick" prefHeight="64.0" prefWidth="250.0" stylesheets="@styles.css" text="Sbírky" textFill="WHITE">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -261,59 +263,6 @@
                </center>
             </BorderPane>
             <BorderPane fx:id="menu" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" />
-            <BorderPane fx:id="pridatSbirku" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Název:">
-                           <VBox.margin>
-                              <Insets top="120.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="sbirkaName" alignment="CENTER" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TextField>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datum založení:">
-                           <VBox.margin>
-                              <Insets top="50.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <DatePicker fx:id="sbirkaCreateDate" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css" />
-                        <Button id="loginBtn" fx:id="vytvorSbirku" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#createSbirka" prefHeight="33.0" prefWidth="121.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="VYTVOŘIT" textAlignment="CENTER" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="100.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </VBox>
-               </center>
-            </BorderPane>
-            <BorderPane fx:id="sbirky" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <top>
-                  <TextField fx:id="searchSbirkaField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat sbírku" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets left="-70.0" top="5.0" />
-                     </BorderPane.margin>
-                  </TextField>
-               </top>
-               <right>
-                  <Button fx:id="searchSbirkaBtn" mnemonicParsing="false" text="🔍" BorderPane.alignment="TOP_LEFT">
-                     <BorderPane.margin>
-                        <Insets right="150.0" top="-25.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </right></BorderPane>
             <BorderPane fx:id="modely" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <top>
                   <TextField fx:id="searchModelsField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" BorderPane.alignment="CENTER">
@@ -396,21 +345,59 @@
                   </ImageView>
                </top>
             </BorderPane>
+            <BorderPane fx:id="pridatSbirku" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Název:">
+                           <VBox.margin>
+                              <Insets top="120.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="sbirkaName" alignment="CENTER" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datum založení:">
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <DatePicker fx:id="sbirkaCreateDate" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css" />
+                        <Button id="loginBtn" fx:id="vytvorSbirku" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#createSbirka" prefHeight="33.0" prefWidth="121.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="VYTVOŘIT" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="100.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
             <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label text="Prezdivka: none">
+                        <Label fx:id="usernameLabel" text="Prezdivka: none">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label text="Počet Sbírek: none">
+                        <Label fx:id="sbirkaCountLabel" text="Počet Sbírek: none">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Label text="Počet Modelů: none">
+                        <Label fx:id="modelCountLabel" text="Počet Modelů: none">
                            <font>
                               <Font size="20.0" />
                            </font>
@@ -426,6 +413,20 @@
                   </Button>
                </bottom>
             </BorderPane>
+            <ScrollPane fx:id="sbirkasSP" prefHeight="593.0" prefWidth="606.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="598.0">
+                     <children>
+                        <Pane fx:id="sbirkas" prefHeight="488.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;">
+                           <children>
+                              <Button fx:id="searchSbirkaBtn" layoutX="412.0" layoutY="2.0" mnemonicParsing="false" text="🔍" />
+                              <TextField fx:id="searchSbirkaField" layoutX="101.0" layoutY="2.0" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat sbírku" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
          </children>
       </StackPane>
    </children>

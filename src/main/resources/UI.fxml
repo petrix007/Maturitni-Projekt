@@ -328,7 +328,7 @@
                         </Button>
                         <Button fx:id="createAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Vytvořit účet" textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
-                              <Insets left="100.0" />
+                              <Insets left="100.0"/>
                            </HBox.margin>
                         </Button>
                      </children>

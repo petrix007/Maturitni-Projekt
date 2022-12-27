@@ -289,10 +289,7 @@ public class UIController implements Initializable {
             usernameLabel.setText("Přezdívka: " + UsersUsername());
             modelCountLabel.setText("Počet modelů: getModel().size()");
             sbirkaCountLabel.setText("Počet sbírek: " + getSbirka().size());
-
-
             loggedIn = true;
-            // DODĚLAT CELKOVÝ POČET SBÍREK / MODELŮ
             loggedUser.toFront();
             sbirkyBtn.setDisable(false);
             menuBtn.setDisable(false);

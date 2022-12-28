@@ -1,5 +1,7 @@
 package Projekt.sbirka.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,10 +10,12 @@ public class Modely {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private int sbirka_id;
-    @Column
-    private int znacka_id;
+    @ManyToOne
+    @JoinColumn(name = "sbirka_id")
+    private Sbirka sbirka_id;
+    @ManyToOne
+    @JoinColumn(name = "znacka_id")
+    private Znacka znacka_id;
     @Column
     private String popis;
 
@@ -22,19 +26,20 @@ public class Modely {
     public void setId(int id) {
         this.id = id;
     }
-    public int getSbirka_id() {
+    @JsonProperty("sbirka_id")
+    public Sbirka getSbirka_id(Sbirka sbirka_id) {
         return sbirka_id;
     }
 
-    public void setSbirka_id(int sbirka_id) {
+    public void setSbirka_id(Sbirka sbirka_id) {
         this.sbirka_id = sbirka_id;
     }
 
-    public int getZnacka_id() {
+    public Znacka getZnacka_id() {
         return znacka_id;
     }
 
-    public void setZnacka_id(int znacka_id) {
+    public void setZnacka_id(Znacka znacka_id) {
         this.znacka_id = znacka_id;
     }
     public String getPopis() {

@@ -1,11 +1,13 @@
 package Projekt.sbirka;
 import Projekt.sbirka.Entity.Sbirka;
 import Projekt.sbirka.Entity.Users;
+import Projekt.sbirka.Entity.Znacka;
 import Projekt.sbirka.Repository.SbirkaRepository;
 import Projekt.sbirka.Repository.UsersRepository;
 import Projekt.sbirka.Service.SbirkaService;
 import Projekt.sbirka.Service.UsersService;
 
+import Projekt.sbirka.Service.ZnackaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,9 +43,19 @@ public class UIController implements Initializable {
     @Autowired
     SbirkaService sbirkaService;
     @Autowired
+    ZnackaService znackaService;
+    @Autowired
     SbirkaRepository sbirkaRepository;
     @FXML
     private Button createAcc;
+
+    @FXML
+    private Button createZnacka;
+
+    @FXML
+    private BorderPane createZnackaPane;
+    @FXML
+    private Button createZnackaToPaneBtn;
 
     @FXML
     private ImageView exitBtn;
@@ -144,6 +156,9 @@ public class UIController implements Initializable {
     @FXML
     private Button vytvorSbirku;
 
+    @FXML
+    private TextField znackaNameField;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -152,6 +167,7 @@ public class UIController implements Initializable {
         String password = prefs.get("password", "");
         usernameField.setText(username);
         passwordField.setText(password);
+
     }
 
     @FXML
@@ -210,6 +226,12 @@ public class UIController implements Initializable {
             titleTxt.setText("VYBERTE OBRÁZKY");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
+        if (event.getSource() == createZnackaToPaneBtn){
+            createZnackaPane.toFront();
+            titleTxt.setText("VYTVOŘTE ZNAČKU");
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        }
     }
     @FXML
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
@@ -252,6 +274,18 @@ public class UIController implements Initializable {
         }
     }
     @FXML
+    public void createZnacka(ActionEvent actionEvent) throws ParseException{
+        if (actionEvent.getSource() == createZnacka){
+            Znacka znacka = new Znacka();
+
+            znacka.setPopis(znackaNameField.getText());
+            znackaService.saveOrUpdate(znacka);
+            System.out.println("Značka byla úspěšně vytvořena");
+            pridatModel.toFront();
+            znackaNameField.setText(null);
+        }
+    }
+    @FXML
     public void createUser(ActionEvent actionEvent) throws ParseException{
         System.out.println("Spuštěno");
         if (actionEvent.getSource() == createAcc){
@@ -275,28 +309,7 @@ public class UIController implements Initializable {
             //}
         }
     }
-    @FXML
-    public void loginUser(ActionEvent actionEvent) throws ParseException {
-        logIn();
-    }
-    void logIn(){
-        if (UsersSorted() == null){
-            System.out.println("Zadali jste neplatnou přezdívku nebo heslo!");
-        } else {
-            System.out.println("Login was succesfull");
-            System.out.println("Id usera: " + asJson(UsersSorted().getId()));
-            loginBtn.setText(UsersUsername());
-            usernameLabel.setText("Přezdívka: " + UsersUsername());
-            modelCountLabel.setText("Počet modelů: getModel().size()");
-            sbirkaCountLabel.setText("Počet sbírek: " + getSbirka().size());
-            loggedIn = true;
-            loggedUser.toFront();
-            sbirkyBtn.setDisable(false);
-            menuBtn.setDisable(false);
-            pridatModelbtn.setDisable(false);
-            pridatSbirkuBtn.setDisable(false);
-        }
-    }
+
     public int startX = 80;
     public int startY = 60;
     public int Width = 120;
@@ -325,8 +338,6 @@ public class UIController implements Initializable {
         }
         System.out.println(startX);
     }
-
-
     public Users UsersSorted(){
         for (Users users : usersService.getAllUsers()){
             if (usernameField.getText().equals(users.getUsername()) && passwordField.getText().equals(users.getPassword())){
@@ -352,6 +363,28 @@ public class UIController implements Initializable {
         return null;
     }
     @FXML
+    public void loginUser(ActionEvent actionEvent) throws ParseException {
+        logIn();
+    }
+    void logIn(){
+        if (UsersSorted() == null){
+            System.out.println("Zadali jste neplatnou přezdívku nebo heslo!");
+        } else {
+            System.out.println("Login was succesfull");
+            System.out.println("Id usera: " + asJson(UsersSorted().getId()));
+            loginBtn.setText(UsersUsername());
+            usernameLabel.setText("Přezdívka: " + UsersUsername());
+            modelCountLabel.setText("Počet modelů: getModel().size()");
+            sbirkaCountLabel.setText("Počet sbírek: " + getSbirka().size());
+            loggedIn = true;
+            loggedUser.toFront();
+            sbirkyBtn.setDisable(false);
+            menuBtn.setDisable(false);
+            pridatModelbtn.setDisable(false);
+            pridatSbirkuBtn.setDisable(false);
+        }
+    }
+    @FXML
     public void logOutUser(ActionEvent actionEvent) throws ParseException{
         login.toFront();
         logOut();
@@ -369,15 +402,4 @@ public class UIController implements Initializable {
         loginBtn.setText("Přihlásit se");
         System.out.println("Odhlásili jsme vás z účtu");
     }
-    /*public void sbirkaCards(){
-        /*TridaColumnNazev.setCellValueFactory(new PropertyValueFactory<>("nazev"));
-        TridaColumnDatumVytvoreni.setCellValueFactory(new PropertyValueFactory<>("created_at"));
-        TridaColumnObor.setCellValueFactory(new PropertyValueFactory<>("obor"));
-        TridaColumnDatumZaniku.setCellValueFactory(new PropertyValueFactory<>("until"));
-
-        for(Trida trida: trida_service.getallTrida()){
-            TableViewTrida.getItems().add(trida);
-        }
-    }*/
-
 }

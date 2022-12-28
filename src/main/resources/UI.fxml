@@ -173,95 +173,6 @@
                   <Button mnemonicParsing="false" text="POTVRDIT" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
-            <BorderPane fx:id="pridatModel" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <left>
-                  <VBox prefHeight="488.0" prefWidth="295.0" spacing="20.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" text="Přidat do sbírky:">
-                           <VBox.margin>
-                              <Insets top="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Vyberte z již existujících značek:">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <Label text="Vytvořte novou značku:">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="Popis:">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="vybratObrBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleClick" style="-fx-background-color: #0598FF;" text="VYBRAT OBRÁZEK" textFill="WHITE">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets left="60.0" />
-                           </VBox.margin>
-                        </Button>
-                        <TextArea maxHeight="120.0" maxWidth="270.0" minHeight="120.0" minWidth="270.0" prefHeight="120.0" prefWidth="270.0">
-                           <VBox.margin>
-                              <Insets left="-20.0" />
-                           </VBox.margin>
-                        </TextArea>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #0598FF;" text="PŘIDAT MODEL" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets left="60.0" top="30.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                        </Button>
-                     </children>
-                     <padding>
-                        <Insets left="30.0" />
-                     </padding>
-                  </VBox>
-               </left>
-               <center>
-                  <VBox prefHeight="488.0" prefWidth="598.0" spacing="20.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ComboBox prefWidth="150.0" promptText="Sbírka">
-                           <VBox.margin>
-                              <Insets top="30.0" />
-                           </VBox.margin>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </ComboBox>
-                        <ComboBox prefWidth="150.0" promptText="Existující značka" />
-                        <TextField maxWidth="270.0" minWidth="270.0" prefWidth="270.0" promptText="Nová značka">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TextField>
-                        <TextArea maxHeight="300.0" maxWidth="270.0" minHeight="200.0" minWidth="100.0" prefHeight="200.0" prefWidth="270.0" promptText="Popis">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TextArea>
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="20.0" />
-                     </opaqueInsets>
-                     <BorderPane.margin>
-                        <Insets left="20.0" />
-                     </BorderPane.margin>
-                  </VBox>
-               </center>
-            </BorderPane>
             <BorderPane fx:id="menu" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" />
             <BorderPane fx:id="modely" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <top>
@@ -328,7 +239,7 @@
                         </Button>
                         <Button fx:id="createAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Vytvořit účet" textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
-                              <Insets left="100.0"/>
+                              <Insets left="100.0" />
                            </HBox.margin>
                         </Button>
                      </children>
@@ -427,6 +338,125 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
+            <BorderPane fx:id="pridatModel" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <left>
+                  <VBox prefHeight="488.0" prefWidth="295.0" spacing="20.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label alignment="CENTER" text="Přidat do sbírky:">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <ComboBox prefWidth="150.0" promptText="Sbírka">
+                           <VBox.margin>
+                              <Insets top="-10.0" />
+                           </VBox.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </ComboBox>
+                        <Label text="Popis:">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <TextArea maxHeight="300.0" maxWidth="270.0" minHeight="200.0" minWidth="100.0" prefHeight="291.0" prefWidth="265.0" promptText="Popis">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                     <padding>
+                        <Insets left="30.0" />
+                     </padding>
+                  </VBox>
+               </left>
+               <center>
+                  <VBox prefHeight="488.0" prefWidth="598.0" spacing="20.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Vyberte z již existujících značek:">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="35.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox prefHeight="25.0" prefWidth="208.0" promptText="Existující značka">
+                           <VBox.margin>
+                              <Insets left="35.0" top="-10.0" />
+                           </VBox.margin></ComboBox>
+                        <Button fx:id="createZnackaToPaneBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleClick" style="-fx-background-color: #0598FF;" text="VYTVOŘIT NOVOU ZNAČKU" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="vybratObrBtn" alignment="CENTER" mnemonicParsing="false" onAction="#handleClick" prefHeight="31.0" prefWidth="208.0" style="-fx-background-color: #0598FF;" text="VYBRAT OBRÁZEK" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <TextArea maxHeight="120.0" maxWidth="270.0" minHeight="120.0" minWidth="213.0" prefHeight="120.0" prefWidth="213.0">
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
+                        </TextArea>
+                        <Button mnemonicParsing="false" style="-fx-background-color: #0598FF;" text="PŘIDAT MODEL" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="70.0" top="30.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <opaqueInsets>
+                        <Insets top="20.0" />
+                     </opaqueInsets>
+                     <BorderPane.margin>
+                        <Insets left="20.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="createZnackaPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Název:">
+                           <VBox.margin>
+                              <Insets top="120.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="znackaNameField" alignment="CENTER" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TextField>
+                        <Button id="loginBtn" fx:id="createZnacka" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#createZnacka" prefHeight="33.0" prefWidth="121.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="VYTVOŘIT" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="60.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
          </children>
       </StackPane>
    </children>

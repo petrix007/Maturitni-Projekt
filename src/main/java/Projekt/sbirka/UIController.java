@@ -4,6 +4,7 @@ import Projekt.sbirka.Entity.Users;
 import Projekt.sbirka.Entity.Znacka;
 import Projekt.sbirka.Repository.SbirkaRepository;
 import Projekt.sbirka.Repository.UsersRepository;
+import Projekt.sbirka.Repository.ZnackaRepository;
 import Projekt.sbirka.Service.SbirkaService;
 import Projekt.sbirka.Service.UsersService;
 
@@ -51,7 +52,10 @@ public class UIController implements Initializable {
 
     @FXML
     private Button createZnacka;
-
+    @FXML
+    private ComboBox<String> znackaComboBox;
+    @FXML
+    private ComboBox<String> sbirkaComboBox;
     @FXML
     private BorderPane createZnackaPane;
     @FXML
@@ -212,6 +216,8 @@ public class UIController implements Initializable {
         }
         if (event.getSource() == pridatModelbtn) {
             pridatModel.toFront();
+            SbirkyToComboBox();
+            ZnackyToComboBox();
             titleTxt.setText("PŘIDAT MODEL");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(49, 85, 143, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -279,6 +285,7 @@ public class UIController implements Initializable {
             Znacka znacka = new Znacka();
 
             znacka.setPopis(znackaNameField.getText());
+            znacka.setUser_id(UsersSorted().getId());
             znackaService.saveOrUpdate(znacka);
             System.out.println("Značka byla úspěšně vytvořena");
             pridatModel.toFront();
@@ -314,6 +321,8 @@ public class UIController implements Initializable {
     public int startY = 60;
     public int Width = 120;
     public int Height = 100;
+    @Autowired
+    private ZnackaRepository znackaRepository;
 
     public void  DrawSbirkas(){
         sbirkas.getChildren().clear();
@@ -401,5 +410,38 @@ public class UIController implements Initializable {
         titleTxt.setText("LOGIN");
         loginBtn.setText("Přihlásit se");
         System.out.println("Odhlásili jsme vás z účtu");
+    }
+
+    public ArrayList<Znacka> ZnackyAll(){
+        ArrayList<Znacka> znackyList = new ArrayList<>();
+        for (Znacka znacka : znackaService.getAllZnacka()){
+            if (znacka.getUser_id() == UsersSorted().getId()){
+                znackyList.add(znacka);
+            }
+        }
+        System.out.println(znackyList);
+        return znackyList;
+    }
+    public void ZnackyToComboBox(){
+        znackaComboBox.getItems().clear();
+        for (Znacka znacka : ZnackyAll()){
+            znackaComboBox.getItems().add(znacka.getPopis());
+        }
+    }
+    public ArrayList<Sbirka> SbirkyAll(){
+        ArrayList<Sbirka> sbirkyList = new ArrayList<>();
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
+            if (getSbirka().equals(UsersSorted().getId())){
+                sbirkyList.add(sbirka);
+            }
+        }
+        System.out.println(sbirkyList);
+        return sbirkyList;
+    }
+    public void SbirkyToComboBox(){
+        sbirkaComboBox.getItems().clear();
+        for (Sbirka sbirka : getSbirka()){
+            sbirkaComboBox.getItems().add(sbirka.getPopis());
+        }
     }
 }

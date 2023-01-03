@@ -174,22 +174,6 @@
                </bottom>
             </BorderPane>
             <BorderPane fx:id="menu" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" />
-            <BorderPane fx:id="modely" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <top>
-                  <TextField fx:id="searchModelsField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets left="-70.0" top="5.0" />
-                     </BorderPane.margin>
-                  </TextField>
-               </top>
-               <right>
-                  <Button fx:id="searchModelBtn" mnemonicParsing="false" text="🔍" BorderPane.alignment="TOP_LEFT">
-                     <BorderPane.margin>
-                        <Insets right="150.0" top="-25.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </right>
-            </BorderPane>
             <BorderPane fx:id="login" prefHeight="488.0" prefWidth="595.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox fillWidth="false" prefHeight="220.0" prefWidth="606.0" spacing="40.0" BorderPane.alignment="BOTTOM_CENTER">
@@ -338,6 +322,51 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
+            <BorderPane fx:id="createZnackaPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Název:">
+                           <VBox.margin>
+                              <Insets top="120.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="znackaNameField" alignment="CENTER" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TextField>
+                        <Button id="loginBtn" fx:id="createZnacka" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#createZnacka" prefHeight="33.0" prefWidth="121.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="VYTVOŘIT" textAlignment="CENTER" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="60.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="modely" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <top>
+                  <TextField fx:id="searchModelsField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets left="-70.0" top="5.0" />
+                     </BorderPane.margin>
+                  </TextField>
+               </top>
+               <right>
+                  <Button fx:id="searchModelBtn" mnemonicParsing="false" text="🔍" BorderPane.alignment="TOP_LEFT">
+                     <BorderPane.margin>
+                        <Insets right="150.0" top="-25.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </right>
+            </BorderPane>
             <BorderPane fx:id="pridatModel" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <left>
                   <VBox prefHeight="488.0" prefWidth="295.0" spacing="20.0" BorderPane.alignment="CENTER">
@@ -350,7 +379,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <ComboBox prefWidth="150.0" promptText="Sbírka">
+                        <ComboBox fx:id="sbirkaComboBox" prefWidth="150.0" promptText="Sbírka">
                            <VBox.margin>
                               <Insets top="-10.0" />
                            </VBox.margin>
@@ -385,7 +414,7 @@
                               <Insets left="35.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <ComboBox prefHeight="25.0" prefWidth="208.0" promptText="Existující značka">
+                        <ComboBox fx:id="znackaComboBox" prefHeight="25.0" prefWidth="208.0" promptText="Existující značka">
                            <VBox.margin>
                               <Insets left="35.0" top="-10.0" />
                            </VBox.margin></ComboBox>
@@ -425,35 +454,6 @@
                      <BorderPane.margin>
                         <Insets left="20.0" />
                      </BorderPane.margin>
-                  </VBox>
-               </center>
-            </BorderPane>
-            <BorderPane fx:id="createZnackaPane" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Název:">
-                           <VBox.margin>
-                              <Insets top="120.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="znackaNameField" alignment="CENTER" prefHeight="29.0" prefWidth="300.0" stylesheets="@styles.css">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TextField>
-                        <Button id="loginBtn" fx:id="createZnacka" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#createZnacka" prefHeight="33.0" prefWidth="121.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="VYTVOŘIT" textAlignment="CENTER" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="60.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
                   </VBox>
                </center>
             </BorderPane>

@@ -1,0 +1,51 @@
+CREATE TABLE `Users` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `username` varchar(200),
+  `password` varchar(200)
+);
+
+CREATE TABLE `Modely` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `sbirka_id` int,
+  `znacka_id` int,
+  `popis` varchar(1000)
+);
+
+CREATE TABLE `Sbirka` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int,
+  `zalozeno` date,
+  `popis` varchar(1000)
+);
+
+CREATE TABLE `Znacka` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int,
+  `popis` varchar(500)
+);
+
+CREATE TABLE `Params` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `model_param` int,
+  `nazev` varchar(500),
+  `hodnota` varchar(500)
+);
+
+CREATE TABLE `Pics` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `model_pic` int,
+  `obr` varchar(500),
+  `popis` varchar(500)
+);
+
+ALTER TABLE `Sbirka` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`);
+
+ALTER TABLE `Modely` ADD FOREIGN KEY (`sbirka_id`) REFERENCES `Sbirka` (`id`);
+
+ALTER TABLE `Modely` ADD FOREIGN KEY (`znacka_id`) REFERENCES `Znacka` (`id`);
+
+ALTER TABLE `Pics` ADD FOREIGN KEY (`model_pic`) REFERENCES `Modely` (`id`);
+
+ALTER TABLE `Params` ADD FOREIGN KEY (`model_param`) REFERENCES `Modely` (`id`);
+
+ALTER TABLE `Znacka` ADD FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`);

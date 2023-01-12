@@ -152,6 +152,8 @@ public class UIController implements Initializable {
     private TextField usernameField;
 
     @FXML
+    private ImageView backFromCreateZnackaPane;
+    @FXML
     private Label usernameLabel;
 
     @FXML
@@ -162,6 +164,14 @@ public class UIController implements Initializable {
 
     @FXML
     private TextField znackaNameField;
+    @FXML
+    private CheckBox zustanPrihlasenCheckBox;
+    public int rememberedZnackaName;
+    public int rememberedSbirkaName;
+    public int startX = 80;
+    public int startY = 60;
+    public int Width = 120;
+    public int Height = 100;
 
 
     @Override
@@ -171,7 +181,6 @@ public class UIController implements Initializable {
         String password = prefs.get("password", "");
         usernameField.setText(username);
         passwordField.setText(password);
-
     }
 
     @FXML
@@ -182,6 +191,15 @@ public class UIController implements Initializable {
     }
 
     public void Exit(javafx.scene.input.MouseEvent event) {
+        if (zustanPrihlasenCheckBox.isSelected() == true){
+            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
+            prefs.put("username", usernameField.getText());
+            prefs.put("password", passwordField.getText());
+        }else {
+            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
+            prefs.remove("username");
+            prefs.remove("password");
+        }
         System.exit(40);
     }
 
@@ -199,10 +217,6 @@ public class UIController implements Initializable {
             loggedUser.toFront();
             titleTxt.setText("USER");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(107, 99, 123, 1), CornerRadii.EMPTY, Insets.EMPTY)));
-            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
-            prefs.put("username", usernameField.getText());
-            prefs.put("password", passwordField.getText());
-
         }
         if (event.getSource() == menuBtn) {
             titleTxt.setText("MENU");
@@ -218,6 +232,8 @@ public class UIController implements Initializable {
             pridatModel.toFront();
             SbirkyToComboBox();
             ZnackyToComboBox();
+            iRememberZnackaCBoxName();
+            iRememberSbirkaCBoxName();
             titleTxt.setText("PŘIDAT MODEL");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(49, 85, 143, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -233,11 +249,18 @@ public class UIController implements Initializable {
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == createZnackaToPaneBtn){
+            rememberSbirkaCBox();
+            rememberZnackaCBox();
             createZnackaPane.toFront();
             titleTxt.setText("VYTVOŘTE ZNAČKU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
-
         }
+    }
+    @FXML
+    public void ibackFromCreateZnackaPane() throws  ParseException{
+        pridatModel.toFront();
+        titleTxt.setText("VYTVOŘTE ZNAČKU");
+        titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     @FXML
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
@@ -269,7 +292,7 @@ public class UIController implements Initializable {
                 list.add(sbirka);
             }
         }
-        System.out.println(list);
+        System.out.println(asJson(list));
         return list;
     }
     private static String asJson(final Object obj) {
@@ -290,14 +313,31 @@ public class UIController implements Initializable {
             System.out.println("Značka byla úspěšně vytvořena");
             pridatModel.toFront();
             znackaNameField.setText(null);
+
         }
+        SbirkyToComboBox();
+        ZnackyToComboBox();
+        iRememberSbirkaCBoxName();
+        iRememberZnackaCBoxName();
+
+    }
+    public String headerText = "header";
+    public  void alerted(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Chyba!");
+        alert.setHeaderText(headerText);
+        alert.showAndWait().ifPresent(rs -> {
+            if (rs == ButtonType.OK) {
+                System.out.println("Pressed OK.");
+            }
+        });
     }
     @FXML
     public void createUser(ActionEvent actionEvent) throws ParseException{
         System.out.println("Spuštěno");
         if (actionEvent.getSource() == createAcc){
             Users users = new Users();
-            //try{
+            try{
             users.setUsername(usernameField.getText());
             System.out.println(usernameField.getText());
             users.setPassword(passwordField.getText());
@@ -305,22 +345,32 @@ public class UIController implements Initializable {
             usersService.saveOrUpdate(users);
             System.out.println(asJson(usersService.getAllUsers()));
             logIn();
-            //}
-            //catch (Exception e){
-            //if (usernameField.getText() == null){
-            //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: USERNAME.");
-            //}
-            //if (passwordField.getText() == null){
-            //    System.out.println(" Upozorneni CHYBA Vyplňte prosím pole: PASSWORD.");
-            //}
-            //}
+            }
+            catch (Exception e){
+                headerText = "Prosím vyplňte všechna pole!";
+                alerted();
+                headerText = "";
+            }
         }
     }
 
-    public int startX = 80;
-    public int startY = 60;
-    public int Width = 120;
-    public int Height = 100;
+    public void rememberSbirkaCBox(){
+        rememberedSbirkaName =  sbirkaComboBox.getSelectionModel().getSelectedIndex();
+        System.out.println(asJson(rememberedSbirkaName));
+    }
+    public void iRememberSbirkaCBoxName(){
+        sbirkaComboBox.getSelectionModel().select(rememberedSbirkaName);
+        System.out.println(asJson(rememberedSbirkaName));
+    }
+
+    public void rememberZnackaCBox(){
+        rememberedZnackaName = znackaComboBox.getSelectionModel().getSelectedIndex();
+        System.out.println(asJson(rememberedZnackaName));
+    }
+    public void iRememberZnackaCBoxName(){
+        znackaComboBox.getSelectionModel().select(rememberedZnackaName);
+        System.out.println(asJson(rememberedZnackaName));
+    }
     @Autowired
     private ZnackaRepository znackaRepository;
 
@@ -377,7 +427,8 @@ public class UIController implements Initializable {
     }
     void logIn(){
         if (UsersSorted() == null){
-            System.out.println("Zadali jste neplatnou přezdívku nebo heslo!");
+            headerText = "Zadali jste špatnou přezdívku nebo heslo!";
+            alerted();
         } else {
             System.out.println("Login was succesfull");
             System.out.println("Id usera: " + asJson(UsersSorted().getId()));
@@ -409,7 +460,8 @@ public class UIController implements Initializable {
         pridatSbirkuBtn.setDisable(true);
         titleTxt.setText("LOGIN");
         loginBtn.setText("Přihlásit se");
-        System.out.println("Odhlásili jsme vás z účtu");
+        headerText = "Odhlásili jsme vás z účtu!";
+        alerted();
     }
 
     public ArrayList<Znacka> ZnackyAll(){
@@ -419,7 +471,7 @@ public class UIController implements Initializable {
                 znackyList.add(znacka);
             }
         }
-        System.out.println(znackyList);
+        System.out.println(asJson(znackyList));
         return znackyList;
     }
     public void ZnackyToComboBox(){
@@ -435,7 +487,7 @@ public class UIController implements Initializable {
                 sbirkyList.add(sbirka);
             }
         }
-        System.out.println(sbirkyList);
+        System.out.println(asJson(sbirkyList));
         return sbirkyList;
     }
     public void SbirkyToComboBox(){

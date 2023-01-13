@@ -1,0 +1,14 @@
+.button{
+    -fx-border-color: #0598FF;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-transition-duration: 0.5s;
+}
+.button:hover{
+    -fx-background-color: #0598FF; }
+
+.image-view-wrapper {
+    -fx-border-color: #0598FF;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+}

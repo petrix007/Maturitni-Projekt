@@ -60,17 +60,6 @@
       </BorderPane>
       <StackPane layoutX="209.0" layoutY="118.0" prefHeight="482.0" prefWidth="599.0">
          <children>
-            <BorderPane fx:id="pridatObrazek" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <left>
-                  <VBox maxWidth="270.0" minWidth="270.0" prefHeight="200.0" prefWidth="270.0" BorderPane.alignment="CENTER" />
-               </left>
-               <right>
-                  <VBox maxWidth="270.0" minWidth="270.0" prefHeight="200.0" prefWidth="270.0" BorderPane.alignment="CENTER" />
-               </right>
-               <bottom>
-                  <Button mnemonicParsing="false" text="POTVRDIT" BorderPane.alignment="CENTER" />
-               </bottom>
-            </BorderPane>
             <BorderPane fx:id="pridatSbirku" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
@@ -370,9 +359,55 @@
                   </ImageView>
                </top>
             </BorderPane>
+            <BorderPane fx:id="pridatObrazek" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <bottom>
+                  <Button fx:id="potvrditBtn" mnemonicParsing="false" text="POTVRDIT" BorderPane.alignment="TOP_CENTER" />
+               </bottom>
+               <top>
+                  <ImageView fx:id="backFromPridatObrazek" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#ibackFromPridatObrazek" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT">
+                     <image>
+                        <Image url="@Images/left-arrow.png" />
+                     </image>
+                     <BorderPane.margin>
+                        <Insets left="20.0" top="20.0" />
+                     </BorderPane.margin>
+                  </ImageView>
+               </top>
+               <center>
+                  <VBox alignment="CENTER" prefHeight="412.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="imageShow" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/nahled.jpg" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="22.0" top="-30.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <TextField fx:id="pathShow" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets left="-60.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Button fx:id="chooseFile" mnemonicParsing="false" onAction="#chooseFileFromPc" prefHeight="20.0" prefWidth="50.0" stylesheets="@chooseBtn.css">
+                           <VBox.margin>
+                              <Insets left="300.0" top="-33.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@Images/chooseFile.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
          </children>
       </StackPane>
-      <BorderPane prefHeight="600.0" prefWidth="209.0" style="-fx-background-color: #0598FF;" AnchorPane.leftAnchor="0.0">
+      <BorderPane fx:id="menuColumn" prefHeight="600.0" prefWidth="209.0" style="-fx-background-color: #0598FF;" AnchorPane.leftAnchor="0.0">
          <top>
             <VBox prefHeight="388.0" prefWidth="0.0" BorderPane.alignment="CENTER">
                <children>
@@ -475,5 +510,15 @@
             </Button>
          </bottom>
       </BorderPane>
+      <ImageView fx:id="backFromCreateZnackaPane1" fitHeight="40.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#ibackFromCreateZnackaPane" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/left-arrow.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="backFromCreateZnackaPane2" fitHeight="40.0" fitWidth="40.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#ibackFromCreateZnackaPane" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/left-arrow.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

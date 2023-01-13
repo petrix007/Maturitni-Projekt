@@ -18,15 +18,21 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.text.ParseException;
@@ -60,7 +66,8 @@ public class UIController implements Initializable {
     private BorderPane createZnackaPane;
     @FXML
     private Button createZnackaToPaneBtn;
-
+    @FXML
+    private BorderPane menuColumn;
     @FXML
     private ImageView exitBtn;
 
@@ -154,6 +161,8 @@ public class UIController implements Initializable {
     @FXML
     private ImageView backFromCreateZnackaPane;
     @FXML
+    private ImageView backFromPridatObrazek;
+    @FXML
     private Label usernameLabel;
 
     @FXML
@@ -164,6 +173,15 @@ public class UIController implements Initializable {
 
     @FXML
     private TextField znackaNameField;
+    @FXML
+    private TextField pathShow;
+
+    @FXML
+    private Button potvrditBtn;
+    @FXML
+    private ImageView imageShow;
+    @FXML
+    private Button chooseFile;
     @FXML
     private CheckBox zustanPrihlasenCheckBox;
     public int rememberedZnackaName;
@@ -263,6 +281,12 @@ public class UIController implements Initializable {
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     @FXML
+    public void ibackFromPridatObrazek() throws  ParseException{
+        pridatModel.toFront();
+        titleTxt.setText("VYBERTE OBRÁZKY");
+        titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+    @FXML
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
         if (actionEvent.getSource() == vytvorSbirku){
             Sbirka sbirka = new Sbirka();
@@ -320,6 +344,29 @@ public class UIController implements Initializable {
         iRememberSbirkaCBoxName();
         iRememberZnackaCBoxName();
 
+    }
+    @FXML
+    public void chooseFileFromPc() throws  ParseException{
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Vyberte obrázek: ");
+        Window window = new Stage();
+        File selectedFile = fileChooser.showOpenDialog(window);
+
+        if (selectedFile != null) {
+            try {
+                File appFolder = new File("C:\\Users\\petrm\\Downloads\\sbirka\\sbirka\\src\\main\\resources\\pics");
+                File copiedFile = new File(appFolder, selectedFile.getName());
+                FileUtils.copyFile(selectedFile, copiedFile);
+                String fileLocation = copiedFile.getAbsolutePath();
+                System.out.println("Soubor byl uložen do: " + fileLocation);
+                String pieceFile = fileLocation.replace("C:\\Users\\petrm\\Downloads\\sbirka\\sbirka\\src\\main\\resources\\pics\\", "");
+
+                pathShow.setText(pieceFile);
+                imageShow.setImage(new Image(fileLocation));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     public String headerText = "header";
     public  void alerted(){

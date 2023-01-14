@@ -54,6 +54,8 @@ public class UIController implements Initializable {
     @Autowired
     SbirkaRepository sbirkaRepository;
     @FXML
+    private ComboBox<String> vyberSbirkuCB;
+    @FXML
     private Button createAcc;
 
     @FXML
@@ -73,6 +75,8 @@ public class UIController implements Initializable {
 
     @FXML
     private Button logOutBtn;
+    @FXML
+    private Button nextObrAdd;
 
     @FXML
     private BorderPane loggedUser;
@@ -99,7 +103,7 @@ public class UIController implements Initializable {
     private Label modelCountLabel;
 
     @FXML
-    private BorderPane modely;
+    private ScrollPane modelySP;
 
     @FXML
     private PasswordField passwordField;
@@ -141,7 +145,7 @@ public class UIController implements Initializable {
     private Button searchModelBtn;
 
     @FXML
-    private TextField searchModelsField;
+    private TextField searchModelField;
 
     @FXML
     private Button searchSbirkaBtn;
@@ -182,6 +186,8 @@ public class UIController implements Initializable {
     private ImageView imageShow;
     @FXML
     private Button chooseFile;
+    @FXML
+    private Button modelyMenuBtn;
     @FXML
     private CheckBox zustanPrihlasenCheckBox;
     public int rememberedZnackaName;
@@ -234,7 +240,7 @@ public class UIController implements Initializable {
         if (event.getSource() == loginBtn & loggedIn ) {
             loggedUser.toFront();
             titleTxt.setText("USER");
-            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(107, 99, 123, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(30, 0, 255, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == menuBtn) {
             titleTxt.setText("MENU");
@@ -272,6 +278,12 @@ public class UIController implements Initializable {
             createZnackaPane.toFront();
             titleTxt.setText("VYTVOŘTE ZNAČKU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        if(event.getSource() == modelyMenuBtn){
+            modelySP.toFront();
+            SbirkyToComboBox2();
+            titleTxt.setText("MODELY");
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(0, 112, 150, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
     @FXML
@@ -400,16 +412,15 @@ public class UIController implements Initializable {
             }
         }
     }
-
     public void rememberSbirkaCBox(){
         rememberedSbirkaName =  sbirkaComboBox.getSelectionModel().getSelectedIndex();
         System.out.println(asJson(rememberedSbirkaName));
     }
+
     public void iRememberSbirkaCBoxName(){
         sbirkaComboBox.getSelectionModel().select(rememberedSbirkaName);
         System.out.println(asJson(rememberedSbirkaName));
     }
-
     public void rememberZnackaCBox(){
         rememberedZnackaName = znackaComboBox.getSelectionModel().getSelectedIndex();
         System.out.println(asJson(rememberedZnackaName));
@@ -489,6 +500,7 @@ public class UIController implements Initializable {
             menuBtn.setDisable(false);
             pridatModelbtn.setDisable(false);
             pridatSbirkuBtn.setDisable(false);
+            modelyMenuBtn.setDisable(false);
         }
     }
     @FXML
@@ -541,6 +553,12 @@ public class UIController implements Initializable {
         sbirkaComboBox.getItems().clear();
         for (Sbirka sbirka : getSbirka()){
             sbirkaComboBox.getItems().add(sbirka.getPopis());
+        }
+    }
+    public void SbirkyToComboBox2(){
+        vyberSbirkuCB.getItems().clear();
+        for (Sbirka sbirka : getSbirka()){
+            vyberSbirkuCB.getItems().add(sbirka.getPopis());
         }
     }
 }

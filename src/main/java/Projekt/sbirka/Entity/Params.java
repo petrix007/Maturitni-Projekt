@@ -1,5 +1,7 @@
 package Projekt.sbirka.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,8 +10,9 @@ public class Params {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private int model_param;
+    @ManyToOne
+    @JoinColumn(name = "model_param")
+    private Modely model_param;
     @Column
     private String nazev;
     @Column
@@ -18,16 +21,15 @@ public class Params {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
-    public int getModel_param() {
+    @JsonProperty("model_param")
+    public Modely getModel_param() {
         return model_param;
     }
 
-    public void setModel_param(int model_param) {
+    public void setModel_param(Modely model_param) {
         this.model_param = model_param;
     }
 

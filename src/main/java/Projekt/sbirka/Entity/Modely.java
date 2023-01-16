@@ -27,7 +27,7 @@ public class Modely {
         this.id = id;
     }
     @JsonProperty("sbirka_id")
-    public Sbirka getSbirka_id(Sbirka sbirka_id) {
+    public Sbirka getSbirka_id() {
         return sbirka_id;
     }
 

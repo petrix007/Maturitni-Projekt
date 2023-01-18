@@ -50,5 +50,9 @@ public class Modely {
         this.popis = popis;
     }
 
+    public String getPopisSbirka(){
+        return sbirka_id.getPopis();
+    }
+
 
 }

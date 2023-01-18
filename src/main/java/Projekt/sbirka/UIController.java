@@ -45,6 +45,11 @@ public class UIController implements Initializable {
     boolean loggedIn = false;
     @Autowired
     UsersService usersService;
+    @FXML
+    private ComboBox<String> ModelObrAddCB;
+
+    @FXML
+    private ComboBox<String> SbirkaObrAddCB;
     @Autowired
     UsersRepository usersRepository;
     @Autowired
@@ -68,9 +73,13 @@ public class UIController implements Initializable {
     @FXML
     private Button createZnacka;
     @FXML
+    private Button chooseFile1;
+    @FXML
     private ComboBox<String> znackaComboBox;
     @FXML
     private ComboBox<String> sbirkaComboBox;
+    @FXML
+    private Button pridatObrazekbtn;
     @FXML
     private BorderPane createZnackaPane;
     @FXML
@@ -83,6 +92,8 @@ public class UIController implements Initializable {
     private Button logOutBtn;
     @FXML
     private Button nextObrAdd;
+    @FXML
+    private BorderPane pridatObrazekWithout;
     @FXML
     private Button createModelBtn;
     @FXML
@@ -103,6 +114,8 @@ public class UIController implements Initializable {
     private Button menuBtn;
     @FXML
     private ImageView minimalizeBtn;
+    @FXML
+    private ImageView imageShow1;
     @FXML
     private Label modelCountLabel;
     @FXML
@@ -233,10 +246,10 @@ public class UIController implements Initializable {
         }
         if (event.getSource() == pridatModelbtn) {
             pridatModel.toFront();
-            SbirkyToComboBox();
-            ZnackyToComboBox();
-            iRememberZnackaCBoxName();
-            iRememberSbirkaCBoxName();
+            SbirkyToComboBox(sbirkaComboBox);
+            ZnackyToComboBox(znackaComboBox);
+            iRememberSbirkaCBoxName(znackaComboBox, rememberedZnackaName);
+            iRememberSbirkaCBoxName(sbirkaComboBox,rememberedSbirkaName );
             titleTxt.setText("PŘIDAT MODEL");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(49, 85, 143, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -252,15 +265,14 @@ public class UIController implements Initializable {
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == createZnackaToPaneBtn){
-            rememberSbirkaCBox();
-            rememberZnackaCBox();
+            rememberSbirkaCBox(rememberedSbirkaName, sbirkaComboBox);
             createZnackaPane.toFront();
             titleTxt.setText("VYTVOŘTE ZNAČKU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if(event.getSource() == modelyMenuBtn){
             modelySP.toFront();
-            SbirkyToComboBox2();
+            SbirkyToComboBox(vyberSbirkuCB);
             titleTxt.setText("MODELY");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(0, 112, 150, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -270,6 +282,24 @@ public class UIController implements Initializable {
         if (event.getSource() == nextObrAdd){;
             pathShow.setText(null);
             imageShow.setImage(new Image("Images\\nahled.jpg"));
+        }
+        if (event.getSource() == chooseFile){
+            try {
+                chooseFileFromPc(imageShow);
+            }catch (Exception e){
+
+            }
+        }
+        if (event.getSource() == chooseFile1){
+            try {
+                chooseFileFromPc(imageShow1);
+            }catch (Exception e){
+
+            }
+        }
+        if (event.getSource() == pridatObrazekbtn){
+            pridatObrazekWithout.toFront();
+            SbirkyToComboBox(SbirkaObrAddCB);
         }
     }
     @FXML
@@ -337,10 +367,10 @@ public class UIController implements Initializable {
             znackaNameField.setText(null);
 
         }
-        SbirkyToComboBox();
-        ZnackyToComboBox();
-        iRememberSbirkaCBoxName();
-        iRememberZnackaCBoxName();
+        SbirkyToComboBox(sbirkaComboBox);
+        ZnackyToComboBox(znackaComboBox);
+        iRememberSbirkaCBoxName(sbirkaComboBox, rememberedSbirkaName);
+        iRememberSbirkaCBoxName(znackaComboBox, rememberedZnackaName);
 
     }
     int modelId;
@@ -378,7 +408,7 @@ public class UIController implements Initializable {
     }
     public Znacka findZnackaFromComboBoxValue(){
         for (Znacka znacka : znackaService.getAllZnacka()){
-            if (znackaComboBox.getSelectionModel().selectedItemProperty().getValue().equals(znacka.getPopis())){
+            if (znackaComboBox.getSelectionModel().selectedItemProperty().getValue().equals(znacka.getPopis())) {
                 return znacka;
             }
         }
@@ -386,7 +416,7 @@ public class UIController implements Initializable {
     }
     String obrazekPath = null;
     @FXML
-    public void chooseFileFromPc() throws  ParseException{
+    public void chooseFileFromPc(ImageView imageHolder) throws  ParseException{
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Vyberte obrázek: ");
         Window window = new Stage();
@@ -402,7 +432,7 @@ public class UIController implements Initializable {
                 String piecePath = fileLocation.replace(fileLocation, "");
                 System.out.println("Soubor byl uložen do: " + fileLocation);
 
-                imageShow.setImage(new Image(fileLocation));
+                imageHolder.setImage(new Image(fileLocation));
                 pathShow.setText(piecePath);
                 obrazekPath = fileLocation;
             } catch (IOException ex) {
@@ -412,12 +442,9 @@ public class UIController implements Initializable {
     }
     public void createObrazek(ActionEvent actionEvent) throws ParseException{
         Pics pics = new Pics();
-
         pics.setModel_pic(GetOborByID(GetIDbyName_Obor(nazevModelField.getText())));
         pics.setObr(obrazekPath);
-        //System.out.println(obrazekPath);
         pics.setPopis(pathShow.getText());
-        //System.out.println(pathShow.getText());
         picsService.saveOrUpdate(pics);
         System.out.println(asJson(pics));
     }
@@ -447,7 +474,6 @@ public class UIController implements Initializable {
             pridatObrazek.toFront();
         }else{
             pridatModel.toFront();
-            //nazevModelField.setText(null);
         }
     }
     @FXML
@@ -471,22 +497,14 @@ public class UIController implements Initializable {
             }
         }
     }
-    public void rememberSbirkaCBox(){
-        rememberedSbirkaName =  sbirkaComboBox.getSelectionModel().getSelectedIndex();
-        System.out.println(asJson(rememberedSbirkaName));
+    public void rememberSbirkaCBox(int rememberName, ComboBox cb){
+        rememberName =  cb.getSelectionModel().getSelectedIndex();
+        System.out.println(asJson(rememberName));
     }
 
-    public void iRememberSbirkaCBoxName(){
-        sbirkaComboBox.getSelectionModel().select(rememberedSbirkaName);
-        System.out.println(asJson(rememberedSbirkaName));
-    }
-    public void rememberZnackaCBox(){
-        rememberedZnackaName = znackaComboBox.getSelectionModel().getSelectedIndex();
-        System.out.println(asJson(rememberedZnackaName));
-    }
-    public void iRememberZnackaCBoxName(){
-        znackaComboBox.getSelectionModel().select(rememberedZnackaName);
-        System.out.println(asJson(rememberedZnackaName));
+    public void iRememberSbirkaCBoxName(ComboBox cb, int rememberName){
+        cb.getSelectionModel().select(rememberName);
+        System.out.println(asJson(rememberName));
     }
     @Autowired
     private ZnackaRepository znackaRepository;
@@ -520,7 +538,7 @@ public class UIController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     modelySP.toFront();
-                    SbirkyToComboBox2();
+                    SbirkyToComboBox(vyberSbirkuCB);
                     vyberSbirkuCB.setValue(imageView.getId());
                     System.out.println(imageView.getId());
                 }
@@ -612,6 +630,7 @@ public class UIController implements Initializable {
             pridatModelbtn.setDisable(false);
             pridatSbirkuBtn.setDisable(false);
             modelyMenuBtn.setDisable(false);
+            pridatObrazekbtn.setDisable(false);
         }
     }
     @FXML
@@ -644,7 +663,7 @@ public class UIController implements Initializable {
         System.out.println(asJson(znackyList));
         return znackyList;
     }
-    public void ZnackyToComboBox(){
+    public void ZnackyToComboBox(ComboBox znackaComboBox){
         znackaComboBox.getItems().clear();
         for (Znacka znacka : ZnackyAll()){
             znackaComboBox.getItems().add(znacka.getPopis());
@@ -660,16 +679,29 @@ public class UIController implements Initializable {
         System.out.println(asJson(sbirkyList));
         return sbirkyList;
     }
-    public void SbirkyToComboBox(){
+    public ArrayList<Modely> ModelyAll(){
+        ArrayList<Modely> modelyList = new ArrayList<>();
+        for (Modely modely : modelyService.getAllModely()){
+            System.out.println(asJson(modelyService.getAllModely()));
+            System.out.println(modely.getPopisSbirka());
+            System.out.println(SbirkaObrAddCB.getValue());
+            if (modely.getPopisSbirka().equals(SbirkaObrAddCB.getValue())){
+                modelyList.add(modely);
+            }
+        }
+        System.out.println(asJson(modelyList));
+        return modelyList;
+    }
+    public void ModelyToComboBox(){
+        ModelObrAddCB.getItems().clear();
+        for (Modely modely : ModelyAll()){
+            ModelObrAddCB.getItems().add(modely.getPopis());
+        }
+    }
+    public void SbirkyToComboBox(ComboBox sbirkaComboBox){
         sbirkaComboBox.getItems().clear();
         for (Sbirka sbirka : getSbirka()){
             sbirkaComboBox.getItems().add(sbirka.getPopis());
-        }
-    }
-    public void SbirkyToComboBox2(){
-        vyberSbirkuCB.getItems().clear();
-        for (Sbirka sbirka : getSbirka()){
-            vyberSbirkuCB.getItems().add(sbirka.getPopis());
         }
     }
 }

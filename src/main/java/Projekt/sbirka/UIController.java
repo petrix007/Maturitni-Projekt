@@ -30,6 +30,7 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.AttributeAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,12 @@ public class UIController implements Initializable {
     @Autowired
     ModelyRepository modelyRepository;
     @Autowired
+    ParamsService paramsService;
+    @Autowired
+    ParamsRepository paramsRepository;
+    @Autowired
     ModelyService modelyService;
+    public int pocetModelu;
     @Autowired
     SbirkaService sbirkaService;
     @Autowired
@@ -69,6 +75,8 @@ public class UIController implements Initializable {
     @FXML
     private ComboBox<String> vyberSbirkuCB;
     @FXML
+    private Button nextObrAdd1;
+    @FXML
     private Button createAcc;
     @FXML
     private Button createZnacka;
@@ -76,6 +84,14 @@ public class UIController implements Initializable {
     private Button chooseFile1;
     @FXML
     private ComboBox<String> znackaComboBox;
+    @FXML
+    private TextField pathShow1;
+    @FXML
+    private TextArea paramsPopisField;
+    @FXML
+    private TextField nazevModelsField;
+    @FXML
+    private TextField paramsHodnotaField;
     @FXML
     private ComboBox<String> sbirkaComboBox;
     @FXML
@@ -96,10 +112,6 @@ public class UIController implements Initializable {
     private BorderPane pridatObrazekWithout;
     @FXML
     private Button createModelBtn;
-    @FXML
-    private TextField nazevModelField;
-    @FXML
-    private TextArea paramsPopisField;
     @FXML
     private BorderPane loggedUser;
     @FXML
@@ -283,16 +295,22 @@ public class UIController implements Initializable {
             pathShow.setText(null);
             imageShow.setImage(new Image("Images\\nahled.jpg"));
         }
+        if (event.getSource() == nextObrAdd1){;
+            pathShow1.setText(null);
+            SbirkaObrAddCB.setValue("Vyberte sbírku");
+            ModelObrAddCB.setValue("VyberteModel");
+            imageShow.setImage(new Image("Images\\nahled.jpg"));
+        }
         if (event.getSource() == chooseFile){
             try {
-                chooseFileFromPc(imageShow);
+                chooseFileFromPc(imageShow, pathShow);
             }catch (Exception e){
 
             }
         }
         if (event.getSource() == chooseFile1){
             try {
-                chooseFileFromPc(imageShow1);
+                chooseFileFromPc(imageShow1, pathShow1);
             }catch (Exception e){
 
             }
@@ -347,6 +365,19 @@ public class UIController implements Initializable {
         System.out.println(asJson(list));
         return list;
     }
+    public ArrayList<Modely> getModely(){
+        ArrayList<Modely> list = new ArrayList<>();
+        for (Modely modely : modelyService.getAllModely()){
+            if (modely.getSbirka_id().equals(UsersSorted(usernameField.getText(), passwordField.getText()).getId())){
+                System.out.println(asJson(modely.getSbirka_id().getId()));
+                System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
+                System.out.println(asJson(modely));
+                list.add(modely);
+            }
+        }
+        System.out.println(asJson(list));
+        return list;
+    }
     private static String asJson(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -378,12 +409,14 @@ public class UIController implements Initializable {
     public void createModel(ActionEvent actionEvent) throws ParseException{
         Modely modely = new Modely();
 
+
         SbirkasSorted();
         ZnackasSorted();
-
-        modely.setPopis(nazevModelField.getText());
+        ModelySorted();
+        modely.setNazev(nazevModelsField.getText());
         modely.setSbirka_id(findSbirkaFromComboBoxValue());
         modely.setZnacka_id(findZnackaFromComboBoxValue());
+
 
         modelId = modely.getId();
 
@@ -391,7 +424,19 @@ public class UIController implements Initializable {
 
         System.out.println("Model byl úspěšně vytvořen");
 
-        //nazevModelField.setText(null);
+        Params params = new Params();
+
+        SbirkasSorted();
+        ZnackasSorted();
+        ModelySorted();
+
+        params.setPopis(paramsPopisField.getText());
+        params.setHodnota(paramsHodnotaField.getText());
+        params.setModel_param(findModelyFromComboBoxValue());
+        paramsService.saveOrUpdate(params);
+        System.out.println(asJson(params));
+
+        //nazevParamField.setText(null);
 
         System.out.println(asJson(sbirkaComboBox.getSelectionModel().selectedItemProperty().getValue()));
         System.out.println(asJson(znackaComboBox.getSelectionModel().selectedItemProperty().getValue()));
@@ -414,9 +459,21 @@ public class UIController implements Initializable {
         }
         return null;
     }
+    public Modely findModelyFromComboBoxValue(){
+        for (Modely modely : modelyService.getAllModely()){
+            System.out.println(asJson(modely));
+            System.out.println(modely.getNazev());
+            System.out.println(asJson(modelyService.getAllModely()));
+            if (nazevModelsField.getText().equals(modely.getNazev()) /*&& znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())*/) {
+
+                return modely;
+            }
+        }
+        return null;
+    }
     String obrazekPath = null;
     @FXML
-    public void chooseFileFromPc(ImageView imageHolder) throws  ParseException{
+    public void chooseFileFromPc(ImageView imageHolder, TextField pathShow) throws  ParseException{
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Vyberte obrázek: ");
         Window window = new Stage();
@@ -442,9 +499,20 @@ public class UIController implements Initializable {
     }
     public void createObrazek(ActionEvent actionEvent) throws ParseException{
         Pics pics = new Pics();
-        pics.setModel_pic(GetOborByID(GetIDbyName_Obor(nazevModelField.getText())));
+        pics.setModel_pic(GetModelById(GetIDbyName_Obor(nazevModelsField.getText())));
         pics.setObr(obrazekPath);
         pics.setPopis(pathShow.getText());
+        picsService.saveOrUpdate(pics);
+        System.out.println(asJson(pics));
+    }
+    public void createObrazekAlone(ActionEvent actionEvent) throws ParseException{
+        Pics pics = new Pics();
+        pics.setModel_pic(GetModelById(GetIDbyName_Obor(ModelObrAddCB.getValue())));
+        System.out.println(ModelObrAddCB.getValue());
+        pics.setObr(obrazekPath);
+        System.out.println(obrazekPath);
+        pics.setPopis(pathShow1.getText());
+        System.out.println(pathShow1.getText());
         picsService.saveOrUpdate(pics);
         System.out.println(asJson(pics));
     }
@@ -559,8 +627,8 @@ public class UIController implements Initializable {
         for (Modely modely : modelyService.getAllModely()) {
             System.out.println(asJson(modelyService.getAllModely()));
             System.out.println(nazev);
-            System.out.println(modely.getPopis());
-            if (modely.getPopis().equals(nazev)) {
+            System.out.println(modely.getNazev());
+            if (modely.getNazev().equals(nazev)) {
                 System.out.println("Mám to!");
                 return modely.getId();
             }
@@ -568,7 +636,7 @@ public class UIController implements Initializable {
         return 0;
     }
 
-    public Modely GetOborByID(int id) {
+    public Modely GetModelById(int id) {
         for (Modely modely : modelyService.getAllModely()) {
             if (modely.getId() == id) {
                 return modely;
@@ -588,6 +656,14 @@ public class UIController implements Initializable {
         for (Znacka znacka : znackaService.getAllZnacka()){
             if (znackaComboBox.getSelectionModel().equals(znacka.getPopis())){
                 return znacka;
+            }
+        }
+        return null;
+    }
+    public Modely ModelySorted(){
+        for (Modely modely : modelyService.getAllModely()){
+            if (paramsPopisField.getText().equals(modely.getNazev()) && znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())){
+                return modely;
             }
         }
         return null;
@@ -621,7 +697,7 @@ public class UIController implements Initializable {
             System.out.println("Id usera: " + asJson(UsersSorted(usernameField.getText(), passwordField.getText()).getId()));
             loginBtn.setText(UsersUsername());
             usernameLabel.setText("Přezdívka: " + UsersUsername());
-            modelCountLabel.setText("Počet modelů: getModel().size()");
+            modelCountLabel.setText("Počet modelů: " + getModely().size());
             sbirkaCountLabel.setText("Počet sbírek: " + getSbirka().size());
             loggedIn = true;
             loggedUser.toFront();
@@ -663,6 +739,26 @@ public class UIController implements Initializable {
         System.out.println(asJson(znackyList));
         return znackyList;
     }
+    public ArrayList<Params> ParamsAll(){
+        ArrayList<Params> paramsList = new ArrayList<>();
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
+            if(SbirkaObrAddCB.getValue() == sbirka.getPopis()){
+                for(Modely modely : modelyService.getAllModely()){
+                    if(modely.getSbirka_id() == sbirka){
+                        System.out.println(asJson(modely.getSbirka_id()));
+                        System.out.println(asJson(sbirka));
+                        for(Params params : paramsService.getAllParams()){
+                            if(params.getModel_param() == modely){
+                                paramsList.add(params);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(asJson(paramsList));
+        return paramsList;
+    }
     public void ZnackyToComboBox(ComboBox znackaComboBox){
         znackaComboBox.getItems().clear();
         for (Znacka znacka : ZnackyAll()){
@@ -695,7 +791,13 @@ public class UIController implements Initializable {
     public void ModelyToComboBox(){
         ModelObrAddCB.getItems().clear();
         for (Modely modely : ModelyAll()){
-            ModelObrAddCB.getItems().add(modely.getPopis());
+            ModelObrAddCB.getItems().add(modely.getNazev());
+        }
+    }
+    public void ParamsToComboBox(){
+        ModelObrAddCB.getItems().clear();
+        for (Params params : ParamsAll()){
+            ModelObrAddCB.getItems().add(params.getPopis());
         }
     }
     public void SbirkyToComboBox(ComboBox sbirkaComboBox){

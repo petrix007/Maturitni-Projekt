@@ -16,8 +16,11 @@ public class Modely {
     @ManyToOne
     @JoinColumn(name = "znacka_id")
     private Znacka znacka_id;
+
+
+
     @Column
-    private String popis;
+    private String nazev;
 
     public int getId() {
         return id;
@@ -42,17 +45,16 @@ public class Modely {
     public void setZnacka_id(Znacka znacka_id) {
         this.znacka_id = znacka_id;
     }
-    public String getPopis() {
-        return popis;
+    public String getNazev() {
+        return nazev;
     }
 
-    public void setPopis(String popis) {
-        this.popis = popis;
+    public void setNazev(String nazev) {
+        this.nazev = nazev;
     }
+
 
     public String getPopisSbirka(){
         return sbirka_id.getPopis();
     }
-
-
 }

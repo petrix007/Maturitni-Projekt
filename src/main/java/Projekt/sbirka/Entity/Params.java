@@ -14,7 +14,7 @@ public class Params {
     @JoinColumn(name = "model_param")
     private Modely model_param;
     @Column
-    private String nazev;
+    private String popis;
     @Column
     private String hodnota;
 
@@ -33,14 +33,14 @@ public class Params {
         this.model_param = model_param;
     }
 
-
-    public String getNazev() {
-        return nazev;
+    public String getPopis() {
+        return popis;
     }
 
-    public void setNazev(String nazev) {
-        this.nazev = nazev;
+    public void setPopis(String popis) {
+        this.popis = popis;
     }
+
 
     public String getHodnota() {
         return hodnota;
@@ -48,5 +48,9 @@ public class Params {
 
     public void setHodnota(String hodnota) {
         this.hodnota = hodnota;
+    }
+
+    public String GetNeco(){
+        return model_param.getSbirka_id().getPopis();
     }
 }

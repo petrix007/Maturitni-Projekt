@@ -40,7 +40,7 @@ public class StageListener implements ApplicationListener<Projekt.sbirka.StageRe
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setResizable(false);
+            stage.setResizable(true);
             stage.setTitle(this.applicationTitle);
             stage.initStyle(StageStyle.UNDECORATED);
             root.setOnMousePressed (evt ->{

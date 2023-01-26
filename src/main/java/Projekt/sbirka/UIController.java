@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.apache.catalina.User;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.AttributeAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,8 @@ public class UIController implements Initializable {
 
     @FXML
     private ComboBox<String> SbirkaObrAddCB;
+    @FXML
+    private ImageView maximalizeBtn;
     @Autowired
     UsersRepository usersRepository;
     @Autowired
@@ -62,6 +66,8 @@ public class UIController implements Initializable {
     @Autowired
     ModelyService modelyService;
     public int pocetModelu;
+    @FXML
+    private Pane sbirkas1;
     @Autowired
     SbirkaService sbirkaService;
     @Autowired
@@ -74,8 +80,18 @@ public class UIController implements Initializable {
     PicsService picsService;
     @FXML
     private ComboBox<String> vyberSbirkuCB;
+
     @FXML
     private Button nextObrAdd1;
+    @FXML
+    private BorderPane modelyDetail;
+    @FXML
+    private ImageView modelDetailImage;
+    @FXML
+    private Label modelNazevDetail;
+
+    @FXML
+    private TextArea modelPopisArea;
     @FXML
     private Button createAcc;
     @FXML
@@ -191,6 +207,8 @@ public class UIController implements Initializable {
     @FXML
     private Button chooseFile;
     @FXML
+    private BorderPane searchBarModels;
+    @FXML
     private Button modelyMenuBtn;
     @FXML
     private CheckBox zustanPrihlasenCheckBox;
@@ -204,11 +222,14 @@ public class UIController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Preferences prefs = Preferences.userNodeForPackage(UIController.class);
-        String username = prefs.get("username", "");
-        String password = prefs.get("password", "");
-        usernameField.setText(username);
-        passwordField.setText(password);
+        try{
+            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
+            String username = prefs.get("username", "");
+            String password = prefs.get("password", "");
+            usernameField.setText(username);
+            passwordField.setText(password);
+        }catch (Exception e){
+        }
     }
 
     @FXML
@@ -217,16 +238,31 @@ public class UIController implements Initializable {
         mini = (Stage) minimalizeBtn.getScene().getWindow();
         mini.setIconified(true);
     }
+    public boolean max = false;
+    @FXML
+    public void Maximalize(MouseEvent event) {
+        max = !max;
+        Stage maxi;
+        maxi = (Stage) maximalizeBtn.getScene().getWindow();
+        maxi.setFullScreen(max);
+        DrawSbirkas();
+        DrawModels();
+    }
 
     public void Exit(javafx.scene.input.MouseEvent event) {
         if (zustanPrihlasenCheckBox.isSelected() == true){
-            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
-            prefs.put("username", usernameField.getText());
-            prefs.put("password", passwordField.getText());
+            try{
+                Preferences prefs = Preferences.userNodeForPackage(UIController.class);
+                prefs.put("username", usernameField.getText());
+                prefs.put("password", passwordField.getText());
+            }catch (Exception e){}
         }else {
-            Preferences prefs = Preferences.userNodeForPackage(UIController.class);
-            prefs.remove("username");
-            prefs.remove("password");
+            try{
+                Preferences prefs = Preferences.userNodeForPackage(UIController.class);
+                prefs.remove("username");
+                prefs.remove("password");
+            }catch (Exception e){
+            }
         }
         System.exit(40);
     }
@@ -244,6 +280,8 @@ public class UIController implements Initializable {
         if (event.getSource() == loginBtn & loggedIn ) {
             loggedUser.toFront();
             titleTxt.setText("USER");
+            modelCountLabel.setText("Počet modelů: " + getModely().size());
+            sbirkaCountLabel.setText("Počet sbírek: " + getSbirka().size());
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(30, 0, 255, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == menuBtn) {
@@ -283,9 +321,10 @@ public class UIController implements Initializable {
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if(event.getSource() == modelyMenuBtn){
-            modelySP.toFront();
+            searchBarModels.toFront();
             SbirkyToComboBox(vyberSbirkuCB);
             titleTxt.setText("MODELY");
+            DrawModels();
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(0, 112, 150, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == potvrditBtn){
@@ -368,12 +407,13 @@ public class UIController implements Initializable {
     public ArrayList<Modely> getModely(){
         ArrayList<Modely> list = new ArrayList<>();
         for (Modely modely : modelyService.getAllModely()){
-            if (modely.getSbirka_id().equals(UsersSorted(usernameField.getText(), passwordField.getText()).getId())){
-                System.out.println(asJson(modely.getSbirka_id().getId()));
-                System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
-                System.out.println(asJson(modely));
-                list.add(modely);
-            }
+                    if (modely.getUserByModel().getId() ==UsersSorted(usernameField.getText(), passwordField.getText()).getId()){
+                        System.out.println(asJson(modely.getSbirka_id().getId()));
+                        System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
+                        System.out.println(asJson(modely));
+                        list.add(modely);
+                    }
+
         }
         System.out.println(asJson(list));
         return list;
@@ -408,7 +448,6 @@ public class UIController implements Initializable {
     @FXML
     public void createModel(ActionEvent actionEvent) throws ParseException{
         Modely modely = new Modely();
-
 
         SbirkasSorted();
         ZnackasSorted();
@@ -464,7 +503,7 @@ public class UIController implements Initializable {
             System.out.println(asJson(modely));
             System.out.println(modely.getNazev());
             System.out.println(asJson(modelyService.getAllModely()));
-            if (nazevModelsField.getText().equals(modely.getNazev()) /*&& znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())*/) {
+            if (nazevModelsField.getText().equals(modely.getNazev()) && znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())) {
 
                 return modely;
             }
@@ -578,7 +617,15 @@ public class UIController implements Initializable {
     private ZnackaRepository znackaRepository;
 
     public void  DrawSbirkas(){
-        int numberOfColumns = 3;
+        Stage stage = (Stage) sbirkyBtn.getScene().getWindow();
+        double width = stage.getWidth();
+        int numberOfColumns;
+        System.out.println(width);
+
+        numberOfColumns = (int) Math.floor((int) width/190) - 1;
+
+        System.out.println(numberOfColumns);
+
         GridPane grid = new GridPane();
         grid.setTranslateX(50);
         grid.setTranslateY(50);
@@ -586,6 +633,7 @@ public class UIController implements Initializable {
         grid.setLayoutX(50);
         grid.setHgap(20);
         grid.setVgap(20);
+
 
 
         int counter = 0;
@@ -601,11 +649,12 @@ public class UIController implements Initializable {
             grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
             counter++;
 
+
             imageView.setId(label.getText());
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    modelySP.toFront();
+                    searchBarModels.toFront();
                     SbirkyToComboBox(vyberSbirkuCB);
                     vyberSbirkuCB.setValue(imageView.getId());
                     System.out.println(imageView.getId());
@@ -614,7 +663,79 @@ public class UIController implements Initializable {
         }
 
         sbirkasSP.setContent(grid);
+
+    }
+    public void  DrawModels() {
+        Stage stage = (Stage) modelyMenuBtn.getScene().getWindow();
+        double width = stage.getWidth();
+        int numberOfColumns;
+        System.out.println(width);
+
+        numberOfColumns = (int) Math.floor((int) width / 190) - 1;
+
+        System.out.println(numberOfColumns);
+
+        GridPane grid = new GridPane();
+
+        grid.setTranslateX(50);
+        grid.setTranslateY(50);
+        grid.setLayoutY(50);
+        grid.setLayoutX(50);
+        grid.setHgap(20);
+        grid.setVgap(20);
+
+
+        int counter = 0;
+        String picPath = "Images/sbirkaFolderIcon.png";
+        for (Modely modely : getModely()) {
+            for (Pics pics: picsService.getAllPics())
+                    if (pics.getModel_pic().getId() == modely.getId()) {
+                        picPath = pics.getObr();
+                        System.out.println(pics.getObr());
+
+                    }
+
+
+
+            System.out.println(asJson(modely));
+            System.out.println(picPath);
+            ImageView imageView = new ImageView(new Image(picPath));
+            picPath = "Images/sbirkaFolderIcon.png";
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(150);
+
+            String modelyNazev = null;
+            if (modely.getNazev().length() >= 40) {
+                modelyNazev = modely.getNazev().substring(0, 30);
+            } else {
+                modelyNazev = modely.getNazev();
+            }
+            Label label = new Label(modelyNazev);
+            System.out.println(modely.getNazev());
+            label.setTextAlignment(TextAlignment.CENTER);
+            VBox vbox = new VBox(imageView, label);
+            vbox.setAlignment(Pos.CENTER);
+            grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
+            counter++;
+
+
+            imageView.setId(label.getText());
+            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    // Modely detail to front  ----  modelySP.toFront();
+                    modelyDetail.toFront();
+                    modelNazevDetail.setText(imageView.getId());
+
+                    System.out.println("Klikl jsi na model: " + imageView.getId());
+                }
+            });
+
         }
+        modelySP.setContent(grid);
+    }
+
     public Users UsersSorted(String username, String password){
         for (Users users : usersService.getAllUsers()){
             if (username.equals(users.getUsername()) && password.equals(users.getPassword())){
@@ -649,6 +770,12 @@ public class UIController implements Initializable {
             if (sbirkaComboBox.getSelectionModel().equals(sbirka.getPopis())){
                 return sbirka;
             }
+        }
+        return null;
+    }
+    public Pics PicsSorted(){
+        for (Pics pics : picsService.getAllPics()){
+
         }
         return null;
     }

@@ -29,6 +29,7 @@ public class Modely {
     public void setId(int id) {
         this.id = id;
     }
+    public Users getUserByModel(){return sbirka_id.getUsers_id();}
     @JsonProperty("sbirka_id")
     public Sbirka getSbirka_id() {
         return sbirka_id;

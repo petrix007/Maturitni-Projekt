@@ -80,7 +80,8 @@ public class UIController implements Initializable {
     PicsService picsService;
     @FXML
     private ComboBox<String> vyberSbirkuCB;
-
+    @FXML
+    private ImageView backFromDetail;
     @FXML
     private Button nextObrAdd1;
     @FXML
@@ -89,7 +90,8 @@ public class UIController implements Initializable {
     private ImageView modelDetailImage;
     @FXML
     private Label modelNazevDetail;
-
+    @FXML
+    private TextField cenaDetailTxtB;
     @FXML
     private TextArea modelPopisArea;
     @FXML
@@ -241,12 +243,18 @@ public class UIController implements Initializable {
     public boolean max = false;
     @FXML
     public void Maximalize(MouseEvent event) {
+        if(max){
+            maximalizeBtn.setImage(new Image("Images/fullscreen1.png"));
+        }else {
+            maximalizeBtn.setImage(new Image("Images/fullscreenoff.png"));
+        }
         max = !max;
         Stage maxi;
         maxi = (Stage) maximalizeBtn.getScene().getWindow();
         maxi.setFullScreen(max);
         DrawSbirkas();
         DrawModels();
+        ModelyChoose();
     }
 
     public void Exit(javafx.scene.input.MouseEvent event) {
@@ -366,6 +374,11 @@ public class UIController implements Initializable {
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     @FXML
+    public void backFromDetail() throws ParseException{
+        searchBarModels.toFront();
+        titleTxt.setText("MODELY");
+    }
+    @FXML
     public void ibackFromPridatObrazek() throws  ParseException{
         pridatModel.toFront();
         titleTxt.setText("VYBERTE OBRÁZKY");
@@ -471,7 +484,8 @@ public class UIController implements Initializable {
 
         params.setPopis(paramsPopisField.getText());
         params.setHodnota(paramsHodnotaField.getText());
-        params.setModel_param(findModelyFromComboBoxValue());
+        params.setModel_param(modely);
+        System.out.println(asJson(modely));
         paramsService.saveOrUpdate(params);
         System.out.println(asJson(params));
 
@@ -538,7 +552,12 @@ public class UIController implements Initializable {
     }
     public void createObrazek(ActionEvent actionEvent) throws ParseException{
         Pics pics = new Pics();
-        pics.setModel_pic(GetModelById(GetIDbyName_Obor(nazevModelsField.getText())));
+        for (Modely modely: modelyService.getAllModely()){
+            if (modely.getNazev().equals(nazevModelsField.getText())){
+                pics.setModel_pic(modely);
+            }
+        }
+        //pics.setModel_pic(GetModelById(GetIDbyName_Obor(nazevModelsField.getText())));
         pics.setObr(obrazekPath);
         pics.setPopis(pathShow.getText());
         picsService.saveOrUpdate(pics);
@@ -692,11 +711,7 @@ public class UIController implements Initializable {
                     if (pics.getModel_pic().getId() == modely.getId()) {
                         picPath = pics.getObr();
                         System.out.println(pics.getObr());
-
                     }
-
-
-
             System.out.println(asJson(modely));
             System.out.println(picPath);
             ImageView imageView = new ImageView(new Image(picPath));
@@ -725,9 +740,27 @@ public class UIController implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {
                     // Modely detail to front  ----  modelySP.toFront();
+                    modelPopisArea.setText(null);
+                    cenaDetailTxtB.setText(null);
+                    modelNazevDetail.setText(null);
+                    int modelId;
                     modelyDetail.toFront();
                     modelNazevDetail.setText(imageView.getId());
+                    modelId = modely.getId();
+                    for (Pics pics: picsService.getAllPics()) {
+                        if (pics.getModel_pic().getId() == modelId) {
+                            modelDetailImage.setImage(new Image(pics.getObr()));
+                            System.out.println(pics.getObr());
+                        }
+                    }
+                    for (Params params: paramsService.getAllParams()){
+                        if (params.getModel_param().getId() == modelId){
+                            modelPopisArea.setText(params.getPopis());
+                            cenaDetailTxtB.setText(params.getHodnota());
+                            System.out.println(params.getPopis());
 
+                        }
+                    }
                     System.out.println("Klikl jsi na model: " + imageView.getId());
                 }
             });
@@ -735,6 +768,7 @@ public class UIController implements Initializable {
         }
         modelySP.setContent(grid);
     }
+
 
     public Users UsersSorted(String username, String password){
         for (Users users : usersService.getAllUsers()){
@@ -885,6 +919,94 @@ public class UIController implements Initializable {
         }
         System.out.println(asJson(paramsList));
         return paramsList;
+    }
+    public ArrayList<Modely> ModelyChoose(){
+        Stage stage = (Stage) modelyMenuBtn.getScene().getWindow();
+        double width = stage.getWidth();
+        int numberOfColumns;
+        System.out.println(width);
+
+        numberOfColumns = (int) Math.floor((int) width / 190) - 1;
+
+        System.out.println(numberOfColumns);
+
+        GridPane grid = new GridPane();
+
+        grid.setTranslateX(50);
+        grid.setTranslateY(50);
+        grid.setLayoutY(50);
+        grid.setLayoutX(50);
+        grid.setHgap(20);
+        grid.setVgap(20);
+
+        ArrayList<Modely> modelyList = new ArrayList<>();
+        int counter = 0;
+        String picPath = "Images/sbirkaFolderIcon.png";
+        for(Modely modely : modelyService.getAllModely()){
+            if(modely.getSbirka_id().getPopis() == vyberSbirkuCB.getValue()){
+                modelyList.add(modely);
+                System.out.println(asJson(modely));
+
+                picPath = "Images/sbirkaFolderIcon.png";
+
+                for (Pics pics: picsService.getAllPics())
+                    if (pics.getModel_pic().getId() == modely.getId()) {
+                        picPath = pics.getObr();
+                        System.out.println(pics.getObr());
+                    }
+                ImageView imageView = new ImageView(new Image(picPath));
+                imageView.setPreserveRatio(true);
+                imageView.setFitWidth(150);
+                imageView.setFitHeight(150);
+                picPath = "Images/sbirkaFolderIcon.png";
+                String modelyNazev = null;
+                if (modely.getNazev().length() >= 40) {
+                    modelyNazev = modely.getNazev().substring(0, 30);
+                } else {
+                    modelyNazev = modely.getNazev();
+                }
+                Label label = new Label(modelyNazev);
+                System.out.println(modely.getNazev());
+                label.setTextAlignment(TextAlignment.CENTER);
+                VBox vbox = new VBox(imageView, label);
+                vbox.setAlignment(Pos.CENTER);
+                grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
+                counter++;
+
+
+                imageView.setId(label.getText());
+                imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        // Modely detail to front  ----  modelySP.toFront();
+                        modelPopisArea.setText(null);
+                        cenaDetailTxtB.setText(null);
+                        modelNazevDetail.setText(null);
+                        int modelId;
+                        modelyDetail.toFront();
+                        modelNazevDetail.setText(imageView.getId());
+                        modelId = modely.getId();
+                        for (Pics pics: picsService.getAllPics()) {
+                            if (pics.getModel_pic().getId() == modelId) {
+                                modelDetailImage.setImage(new Image(pics.getObr()));
+                                System.out.println(pics.getObr());
+                            }
+                        }
+                        for (Params params: paramsService.getAllParams()){
+                            if (params.getModel_param().getId() == modelId){
+                                modelPopisArea.setText(params.getPopis());
+                                cenaDetailTxtB.setText(params.getHodnota());
+                                System.out.println(params.getPopis());
+
+                            }
+                        }
+                        System.out.println("Klikl jsi na model: " + imageView.getId());
+                    }
+                });
+            }
+        }
+        modelySP.setContent(grid);
+        return modelyList;
     }
     public void ZnackyToComboBox(ComboBox znackaComboBox){
         znackaComboBox.getItems().clear();

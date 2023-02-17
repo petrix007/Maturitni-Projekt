@@ -6,13 +6,17 @@ import Projekt.sbirka.Service.*;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,6 +28,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -38,6 +43,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -50,7 +58,18 @@ public class UIController implements Initializable {
     UsersService usersService;
     @FXML
     private ComboBox<String> ModelObrAddCB;
-
+    @FXML
+    private ImageView pridatModelMenuBtn;
+    @FXML
+    private ImageView pridatObrazekMenuBtn;
+    @FXML
+    private ImageView pridatSbirkuMenuBtn;
+    @FXML
+    private ImageView profilMenuBtn;
+    @FXML
+    private ImageView sbirkyMenuBtn;
+    @FXML
+    private ImageView modelyShowMenuBtn;
     @FXML
     private ComboBox<String> SbirkaObrAddCB;
     @FXML
@@ -230,6 +249,7 @@ public class UIController implements Initializable {
             String password = prefs.get("password", "");
             usernameField.setText(username);
             passwordField.setText(password);
+            zustanPrihlasenCheckBox.setSelected(true);
         }catch (Exception e){
         }
     }
@@ -245,16 +265,43 @@ public class UIController implements Initializable {
     public void Maximalize(MouseEvent event) {
         if(max){
             maximalizeBtn.setImage(new Image("Images/fullscreen1.png"));
+            Scale scale = new Scale(1, 1);
+            scale.setPivotX(0);
+            scale.setPivotY(0);
+            sbirkyMenuBtn.getTransforms().setAll(scale);
+            modelyShowMenuBtn.getTransforms().setAll(scale);
+            pridatObrazekMenuBtn.getTransforms().setAll(scale);
+            profilMenuBtn.getTransforms().setAll(scale);
+            pridatModelMenuBtn.getTransforms().setAll(scale);
+            pridatSbirkuMenuBtn.getTransforms().setAll(scale);
+
+
         }else {
             maximalizeBtn.setImage(new Image("Images/fullscreenoff.png"));
+            Scale scale = new Scale(1.6, 1.6);
+            scale.setPivotX(170);
+            scale.setPivotY(120);
+            sbirkyMenuBtn.getTransforms().setAll(scale);
+            modelyShowMenuBtn.getTransforms().setAll(scale);
+            pridatObrazekMenuBtn.getTransforms().setAll(scale);
+            profilMenuBtn.getTransforms().setAll(scale);
+            pridatModelMenuBtn.getTransforms().setAll(scale);
+            pridatSbirkuMenuBtn.getTransforms().setAll(scale);
+
         }
         max = !max;
         Stage maxi;
         maxi = (Stage) maximalizeBtn.getScene().getWindow();
         maxi.setFullScreen(max);
-        DrawSbirkas();
-        DrawModels();
-        ModelyChoose();
+        try{
+            DrawSbirkas();
+            DrawModels();
+            ModelyChoose();
+
+        }catch (Exception e){
+
+        }
+
     }
 
     public void Exit(javafx.scene.input.MouseEvent event) {
@@ -299,7 +346,9 @@ public class UIController implements Initializable {
         }
         if (event.getSource() == pridatSbirkuBtn) {
             pridatSbirku.toFront();
-            titleTxt.setText("PŘIDAT SBÍRKU");
+            LocalDate currentDate = LocalDate.now();
+            sbirkaCreateDate.setValue(currentDate);
+            titleTxt.setText("VYTVOŘTE SBÍRKU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(48, 71, 94, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == pridatModelbtn) {
@@ -308,7 +357,7 @@ public class UIController implements Initializable {
             ZnackyToComboBox(znackaComboBox);
             iRememberSbirkaCBoxName(znackaComboBox, rememberedZnackaName);
             iRememberSbirkaCBoxName(sbirkaComboBox,rememberedSbirkaName );
-            titleTxt.setText("PŘIDAT MODEL");
+            titleTxt.setText("VYTVOŘTE MODEL");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(49, 85, 143, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         if (event.getSource() == sbirkyBtn) {
@@ -367,6 +416,45 @@ public class UIController implements Initializable {
             SbirkyToComboBox(SbirkaObrAddCB);
         }
     }
+    public void pridatObrEditMode() throws ParseException{
+        pridatObrazekWithout.toFront();
+            for (Modely modely: modelyService.getAllModely()){
+                System.out.println(modely.getNazev());
+                System.out.println(modelNazevDetail.getText());
+                if (modelNazevDetail.getText().equals(modely.getNazev())){
+                    System.out.println(modely.getNazev());
+                    ModelObrAddCB.setValue(modelNazevDetail.getText());
+                    SbirkaObrAddCB.setValue(modely.getSbirka_id().getPopis());
+                }
+            }
+    }
+    public void profilToFront() throws  ParseException {
+        loggedUser.toFront();
+        titleTxt.setText("PROFIL");
+    }
+    public void modelyShowToFront() throws  ParseException {
+        searchBarModels.toFront();
+        SbirkyToComboBox(vyberSbirkuCB);
+        DrawModels();
+        titleTxt.setText("MODELY");
+    }
+    public void sbirkySPToFront() throws  ParseException {
+        sbirkasSP.toFront();
+        DrawSbirkas();
+        titleTxt.setText("SBÍRKY");
+    }
+    public void obrCreateToFront() throws  ParseException {
+        pridatObrazekWithout.toFront();
+        titleTxt.setText("VYTVOŘTE OBRÁZEK");
+    }
+    public void modelyToFront() throws  ParseException{
+        pridatModel.toFront();
+        titleTxt.setText("VYTVOŘTE MODEL");
+    }
+    public void sbirkasToFront() throws  ParseException{
+        pridatSbirku.toFront();
+        titleTxt.setText("VYTVOŘTE SBÍRKU");
+    }
     @FXML
     public void ibackFromCreateZnackaPane() throws  ParseException{
         pridatModel.toFront();
@@ -388,7 +476,7 @@ public class UIController implements Initializable {
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
         if (actionEvent.getSource() == vytvorSbirku){
             Sbirka sbirka = new Sbirka();
-            //{try{
+            try{
                 sbirka.setUsers_id(UsersSorted(usernameField.getText(), passwordField.getText()));
                 String name = sbirkaName.getText();
                 sbirka.setPopis(name);
@@ -397,14 +485,14 @@ public class UIController implements Initializable {
                 sbirkaService.saveOrUpdate(sbirka);
                 System.out.println(asJson(sbirkaService.getAllSbirka()));
             }
-            //catch (Exception e){
+            catch (Exception e){
                 if (sbirkaName.getText() == null){
                     System.out.println(" Upozorneni CHYBA Zadejte prosim nazev sbirky.");
                 }
                 if (sbirkaCreateDate.getValue() == null){
                     System.out.println(" Upozorneni CHYBA Zadejte prosim datuv vytvoreni sbirky.");
-              //  }
-           // }
+                }
+            }
         }
     }
     public ArrayList<Sbirka> getSbirka(){
@@ -758,18 +846,14 @@ public class UIController implements Initializable {
                             modelPopisArea.setText(params.getPopis());
                             cenaDetailTxtB.setText(params.getHodnota());
                             System.out.println(params.getPopis());
-
                         }
                     }
                     System.out.println("Klikl jsi na model: " + imageView.getId());
                 }
             });
-
         }
         modelySP.setContent(grid);
     }
-
-
     public Users UsersSorted(String username, String password){
         for (Users users : usersService.getAllUsers()){
             if (username.equals(users.getUsername()) && password.equals(users.getPassword())){

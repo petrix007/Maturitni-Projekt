@@ -6,6 +6,10 @@ import Projekt.sbirka.Service.*;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,7 +35,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import org.apache.catalina.User;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.AttributeAccessor;
@@ -63,7 +69,13 @@ public class UIController implements Initializable {
     @FXML
     private ImageView pridatObrazekMenuBtn;
     @FXML
+    private ImageView topLeftLogoImg;
+    @FXML
     private ImageView pridatSbirkuMenuBtn;
+    @FXML
+    private BorderPane progressBP;
+    @FXML
+    private ProgressBar progressIndicator;
     @FXML
     private ImageView profilMenuBtn;
     @FXML
@@ -214,6 +226,8 @@ public class UIController implements Initializable {
     @FXML
     private Label usernameLabel;
     @FXML
+    private Pane sbirkas11 = new Pane();
+    @FXML
     private Button vybratObrBtn;
     @FXML
     private Button vytvorSbirku;
@@ -240,17 +254,16 @@ public class UIController implements Initializable {
     public int Width = 120;
     public int Height = 100;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try{
+        try {
             Preferences prefs = Preferences.userNodeForPackage(UIController.class);
             String username = prefs.get("username", "");
             String password = prefs.get("password", "");
             usernameField.setText(username);
             passwordField.setText(password);
             zustanPrihlasenCheckBox.setSelected(true);
-        }catch (Exception e){
+        } catch (Exception e) {
         }
     }
 
@@ -260,10 +273,19 @@ public class UIController implements Initializable {
         mini = (Stage) minimalizeBtn.getScene().getWindow();
         mini.setIconified(true);
     }
+
     public boolean max = false;
+
+    @FXML
+    public void LogoClick(MouseEvent event) {
+        titleTxt.setText("MENU");
+        titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(6, 40, 61, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+        menu.toFront();
+    }
+
     @FXML
     public void Maximalize(MouseEvent event) {
-        if(max){
+        if (max) {
             maximalizeBtn.setImage(new Image("Images/fullscreen1.png"));
             Scale scale = new Scale(1, 1);
             scale.setPivotX(0);
@@ -274,9 +296,7 @@ public class UIController implements Initializable {
             profilMenuBtn.getTransforms().setAll(scale);
             pridatModelMenuBtn.getTransforms().setAll(scale);
             pridatSbirkuMenuBtn.getTransforms().setAll(scale);
-
-
-        }else {
+        } else {
             maximalizeBtn.setImage(new Image("Images/fullscreenoff.png"));
             Scale scale = new Scale(1.6, 1.6);
             scale.setPivotX(170);
@@ -287,36 +307,35 @@ public class UIController implements Initializable {
             profilMenuBtn.getTransforms().setAll(scale);
             pridatModelMenuBtn.getTransforms().setAll(scale);
             pridatSbirkuMenuBtn.getTransforms().setAll(scale);
-
         }
         max = !max;
         Stage maxi;
         maxi = (Stage) maximalizeBtn.getScene().getWindow();
         maxi.setFullScreen(max);
-        try{
+        try {
             DrawSbirkas();
             DrawModels();
             ModelyChoose();
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-
     }
 
     public void Exit(javafx.scene.input.MouseEvent event) {
-        if (zustanPrihlasenCheckBox.isSelected() == true){
-            try{
+        if (zustanPrihlasenCheckBox.isSelected() == true) {
+            try {
                 Preferences prefs = Preferences.userNodeForPackage(UIController.class);
                 prefs.put("username", usernameField.getText());
                 prefs.put("password", passwordField.getText());
-            }catch (Exception e){}
-        }else {
-            try{
+            } catch (Exception e) {
+            }
+        } else {
+            try {
                 Preferences prefs = Preferences.userNodeForPackage(UIController.class);
                 prefs.remove("username");
                 prefs.remove("password");
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
         System.exit(40);
@@ -324,15 +343,12 @@ public class UIController implements Initializable {
 
     @FXML
     private void handleClick(ActionEvent event) {
-        if (event.getSource() == vytvorSbirku) {
-            System.out.println("funguje!");
-        }
-        if (event.getSource() == loginBtn & !loggedIn ) {
+        if (event.getSource() == loginBtn & !loggedIn) {
             login.toFront();
             titleTxt.setText("LOGIN");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(37, 109, 133, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        if (event.getSource() == loginBtn & loggedIn ) {
+        if (event.getSource() == loginBtn & loggedIn) {
             loggedUser.toFront();
             titleTxt.setText("USER");
             modelCountLabel.setText("Počet modelů: " + getModely().size());
@@ -343,6 +359,7 @@ public class UIController implements Initializable {
             titleTxt.setText("MENU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(6, 40, 61, 1), CornerRadii.EMPTY, Insets.EMPTY)));
             menu.toFront();
+
         }
         if (event.getSource() == pridatSbirkuBtn) {
             pridatSbirku.toFront();
@@ -356,7 +373,7 @@ public class UIController implements Initializable {
             SbirkyToComboBox(sbirkaComboBox);
             ZnackyToComboBox(znackaComboBox);
             iRememberSbirkaCBoxName(znackaComboBox, rememberedZnackaName);
-            iRememberSbirkaCBoxName(sbirkaComboBox,rememberedSbirkaName );
+            iRememberSbirkaCBoxName(sbirkaComboBox, rememberedSbirkaName);
             titleTxt.setText("VYTVOŘTE MODEL");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(49, 85, 143, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
@@ -371,112 +388,129 @@ public class UIController implements Initializable {
             titleTxt.setText("VYBERTE OBRÁZKY");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        if (event.getSource() == createZnackaToPaneBtn){
+        if (event.getSource() == createZnackaToPaneBtn) {
             rememberSbirkaCBox(rememberedSbirkaName, sbirkaComboBox);
             createZnackaPane.toFront();
             titleTxt.setText("VYTVOŘTE ZNAČKU");
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        if(event.getSource() == modelyMenuBtn){
+        if (event.getSource() == modelyMenuBtn) {
             searchBarModels.toFront();
+            //ProgressIndicator();
+            DrawModels();
+
             SbirkyToComboBox(vyberSbirkuCB);
             titleTxt.setText("MODELY");
-            DrawModels();
             titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(0, 112, 150, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        if (event.getSource() == potvrditBtn){
+        if (event.getSource() == potvrditBtn) {
             pridatModel.toFront();
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        if (event.getSource() == nextObrAdd){;
+        if (event.getSource() == nextObrAdd) {
+            ;
             pathShow.setText(null);
             imageShow.setImage(new Image("Images\\nahled.jpg"));
         }
-        if (event.getSource() == nextObrAdd1){;
+        if (event.getSource() == nextObrAdd1) {
+            ;
             pathShow1.setText(null);
             SbirkaObrAddCB.setValue("Vyberte sbírku");
             ModelObrAddCB.setValue("VyberteModel");
             imageShow.setImage(new Image("Images\\nahled.jpg"));
         }
-        if (event.getSource() == chooseFile){
+        if (event.getSource() == chooseFile) {
             try {
                 chooseFileFromPc(imageShow, pathShow);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
-        if (event.getSource() == chooseFile1){
+        if (event.getSource() == chooseFile1) {
             try {
                 chooseFileFromPc(imageShow1, pathShow1);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
-        if (event.getSource() == pridatObrazekbtn){
+        if (event.getSource() == pridatObrazekbtn) {
             pridatObrazekWithout.toFront();
             SbirkyToComboBox(SbirkaObrAddCB);
         }
     }
-    public void pridatObrEditMode() throws ParseException{
+
+    public void pridatObrEditMode() throws ParseException {
         pridatObrazekWithout.toFront();
-            for (Modely modely: modelyService.getAllModely()){
+        for (Modely modely : modelyService.getAllModely()) {
+            System.out.println(modely.getNazev());
+            System.out.println(modelNazevDetail.getText());
+            if (modelNazevDetail.getText().equals(modely.getNazev())) {
                 System.out.println(modely.getNazev());
-                System.out.println(modelNazevDetail.getText());
-                if (modelNazevDetail.getText().equals(modely.getNazev())){
-                    System.out.println(modely.getNazev());
-                    ModelObrAddCB.setValue(modelNazevDetail.getText());
-                    SbirkaObrAddCB.setValue(modely.getSbirka_id().getPopis());
-                }
+                ModelObrAddCB.setValue(modelNazevDetail.getText());
+                SbirkaObrAddCB.setValue(modely.getSbirka_id().getPopis());
             }
+        }
     }
-    public void profilToFront() throws  ParseException {
+
+    public void profilToFront() throws ParseException {
         loggedUser.toFront();
         titleTxt.setText("PROFIL");
     }
-    public void modelyShowToFront() throws  ParseException {
+
+    public void modelyShowToFront() throws ParseException {
         searchBarModels.toFront();
         SbirkyToComboBox(vyberSbirkuCB);
-        DrawModels();
         titleTxt.setText("MODELY");
     }
-    public void sbirkySPToFront() throws  ParseException {
+
+    public void sbirkySPToFront() throws ParseException {
         sbirkasSP.toFront();
         DrawSbirkas();
         titleTxt.setText("SBÍRKY");
     }
-    public void obrCreateToFront() throws  ParseException {
+
+    public void obrCreateToFront() throws ParseException {
         pridatObrazekWithout.toFront();
         titleTxt.setText("VYTVOŘTE OBRÁZEK");
     }
-    public void modelyToFront() throws  ParseException{
+
+    public void modelyToFront() throws ParseException {
         pridatModel.toFront();
+        titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         titleTxt.setText("VYTVOŘTE MODEL");
     }
-    public void sbirkasToFront() throws  ParseException{
+
+    public void sbirkasToFront() throws ParseException {
         pridatSbirku.toFront();
         titleTxt.setText("VYTVOŘTE SBÍRKU");
     }
+
     @FXML
-    public void ibackFromCreateZnackaPane() throws  ParseException{
+    public void ibackFromCreateZnackaPane() throws ParseException {
         pridatModel.toFront();
         titleTxt.setText("VYTVOŘTE ZNAČKU");
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
+
     @FXML
-    public void backFromDetail() throws ParseException{
+    public void backFromDetail() throws ParseException {
         searchBarModels.toFront();
+        modelDetailImage.setImage(new Image("Images/sbirkaFolderIcon.png"));
         titleTxt.setText("MODELY");
     }
+
     @FXML
-    public void ibackFromPridatObrazek() throws  ParseException{
+    public void ibackFromPridatObrazek() throws ParseException {
         pridatModel.toFront();
         titleTxt.setText("VYBERTE OBRÁZKY");
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
+
     @FXML
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
-        if (actionEvent.getSource() == vytvorSbirku){
+        if (actionEvent.getSource() == vytvorSbirku) {
             Sbirka sbirka = new Sbirka();
-            try{
+            try {
                 sbirka.setUsers_id(UsersSorted(usernameField.getText(), passwordField.getText()));
                 String name = sbirkaName.getText();
                 sbirka.setPopis(name);
@@ -484,41 +518,42 @@ public class UIController implements Initializable {
                 System.out.println(asJson(sbirka));
                 sbirkaService.saveOrUpdate(sbirka);
                 System.out.println(asJson(sbirkaService.getAllSbirka()));
-            }
-            catch (Exception e){
-                if (sbirkaName.getText() == null){
+            } catch (Exception e) {
+                if (sbirkaName.getText() == null) {
                     System.out.println(" Upozorneni CHYBA Zadejte prosim nazev sbirky.");
                 }
-                if (sbirkaCreateDate.getValue() == null){
+                if (sbirkaCreateDate.getValue() == null) {
                     System.out.println(" Upozorneni CHYBA Zadejte prosim datuv vytvoreni sbirky.");
                 }
             }
         }
     }
-    public ArrayList<Sbirka> getSbirka(){
+
+    public ArrayList<Sbirka> getSbirka() {
         ArrayList<Sbirka> list = new ArrayList<>();
-        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
-            if (sbirka.getUsers_id().getId() == (UsersSorted(usernameField.getText(), passwordField.getText()).getId())){
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()) {
+            if (sbirka.getUsers_id().getId() == (UsersSorted(usernameField.getText(), passwordField.getText()).getId())) {
                 list.add(sbirka);
             }
         }
         System.out.println(asJson(list));
         return list;
     }
-    public ArrayList<Modely> getModely(){
-        ArrayList<Modely> list = new ArrayList<>();
-        for (Modely modely : modelyService.getAllModely()){
-                    if (modely.getUserByModel().getId() ==UsersSorted(usernameField.getText(), passwordField.getText()).getId()){
-                        System.out.println(asJson(modely.getSbirka_id().getId()));
-                        System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
-                        System.out.println(asJson(modely));
-                        list.add(modely);
-                    }
 
+    public ArrayList<Modely> getModely() {
+        ArrayList<Modely> list = new ArrayList<>();
+        for (Modely modely : modelyService.getAllModely()) {
+            if (modely.getUserByModel().getId() == UsersSorted(usernameField.getText(), passwordField.getText()).getId()) {
+                System.out.println(asJson(modely.getSbirka_id().getId()));
+                System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
+                System.out.println(asJson(modely));
+                list.add(modely);
+            }
         }
         System.out.println(asJson(list));
         return list;
     }
+
     private static String asJson(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -526,9 +561,10 @@ public class UIController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     @FXML
-    public void createZnacka(ActionEvent actionEvent) throws ParseException{
-        if (actionEvent.getSource() == createZnacka){
+    public void createZnacka(ActionEvent actionEvent) throws ParseException {
+        if (actionEvent.getSource() == createZnacka) {
             Znacka znacka = new Znacka();
 
             znacka.setPopis(znackaNameField.getText());
@@ -536,6 +572,7 @@ public class UIController implements Initializable {
             znackaService.saveOrUpdate(znacka);
             System.out.println("Značka byla úspěšně vytvořena");
             pridatModel.toFront();
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
             znackaNameField.setText(null);
 
         }
@@ -545,9 +582,11 @@ public class UIController implements Initializable {
         iRememberSbirkaCBoxName(znackaComboBox, rememberedZnackaName);
 
     }
+
     int modelId;
+
     @FXML
-    public void createModel(ActionEvent actionEvent) throws ParseException{
+    public void createModel(ActionEvent actionEvent) throws ParseException {
         Modely modely = new Modely();
 
         SbirkasSorted();
@@ -577,31 +616,32 @@ public class UIController implements Initializable {
         paramsService.saveOrUpdate(params);
         System.out.println(asJson(params));
 
-        //nazevParamField.setText(null);
-
         System.out.println(asJson(sbirkaComboBox.getSelectionModel().selectedItemProperty().getValue()));
         System.out.println(asJson(znackaComboBox.getSelectionModel().selectedItemProperty().getValue()));
 
         wannaAddObrAlert();
     }
-    public Sbirka findSbirkaFromComboBoxValue(){
-        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
-            if (sbirkaComboBox.getSelectionModel().selectedItemProperty().getValue().equals(sbirka.getPopis())){
+
+    public Sbirka findSbirkaFromComboBoxValue() {
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()) {
+            if (sbirkaComboBox.getSelectionModel().selectedItemProperty().getValue().equals(sbirka.getPopis())) {
                 return sbirka;
             }
         }
         return null;
     }
-    public Znacka findZnackaFromComboBoxValue(){
-        for (Znacka znacka : znackaService.getAllZnacka()){
+
+    public Znacka findZnackaFromComboBoxValue() {
+        for (Znacka znacka : znackaService.getAllZnacka()) {
             if (znackaComboBox.getSelectionModel().selectedItemProperty().getValue().equals(znacka.getPopis())) {
                 return znacka;
             }
         }
         return null;
     }
-    public Modely findModelyFromComboBoxValue(){
-        for (Modely modely : modelyService.getAllModely()){
+
+    public Modely findModelyFromComboBoxValue() {
+        for (Modely modely : modelyService.getAllModely()) {
             System.out.println(asJson(modely));
             System.out.println(modely.getNazev());
             System.out.println(asJson(modelyService.getAllModely()));
@@ -612,15 +652,22 @@ public class UIController implements Initializable {
         }
         return null;
     }
+
     String obrazekPath = null;
+
     @FXML
-    public void chooseFileFromPc(ImageView imageHolder, TextField pathShow) throws  ParseException{
+    public void chooseFileFromPc(ImageView imageHolder, TextField pathShow) throws ParseException {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JPEG files (*.jpg)", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png"),
+                new FileChooser.ExtensionFilter("JPEG files (*.jpeg)", "*.jpeg")
+        );
         fileChooser.setTitle("Vyberte obrázek: ");
         Window window = new Stage();
         File selectedFile = fileChooser.showOpenDialog(window);
 
-        if (selectedFile != null) {
+        if (selectedFile != null && selectedFile.length() <= 10_000_000) {
             try {
                 String appData = System.getenv("APPDATA");
                 File appFolder = new File(appData);
@@ -635,23 +682,28 @@ public class UIController implements Initializable {
                 obrazekPath = fileLocation;
             } catch (IOException ex) {
                 ex.printStackTrace();
+
+
             }
+        } else {
+            alerted("Obrázek je příliš velký!");
         }
     }
-    public void createObrazek(ActionEvent actionEvent) throws ParseException{
+
+    public void createObrazek(ActionEvent actionEvent) throws ParseException {
         Pics pics = new Pics();
-        for (Modely modely: modelyService.getAllModely()){
-            if (modely.getNazev().equals(nazevModelsField.getText())){
+        for (Modely modely : modelyService.getAllModely()) {
+            if (modely.getNazev().equals(nazevModelsField.getText())) {
                 pics.setModel_pic(modely);
             }
         }
-        //pics.setModel_pic(GetModelById(GetIDbyName_Obor(nazevModelsField.getText())));
         pics.setObr(obrazekPath);
         pics.setPopis(pathShow.getText());
         picsService.saveOrUpdate(pics);
         System.out.println(asJson(pics));
     }
-    public void createObrazekAlone(ActionEvent actionEvent) throws ParseException{
+
+    public void createObrazekAlone(ActionEvent actionEvent) throws ParseException {
         Pics pics = new Pics();
         pics.setModel_pic(GetModelById(GetIDbyName_Obor(ModelObrAddCB.getValue())));
         System.out.println(ModelObrAddCB.getValue());
@@ -662,8 +714,8 @@ public class UIController implements Initializable {
         picsService.saveOrUpdate(pics);
         System.out.println(asJson(pics));
     }
-    public String headerText = "header";
-    public  void alerted(){
+
+    public void alerted(String headerText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Chyba!");
         alert.setHeaderText(headerText);
@@ -673,7 +725,8 @@ public class UIController implements Initializable {
             }
         });
     }
-    public void wannaAddObrAlert(){
+
+    public void wannaAddObrAlert() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("OKNO");
         alert.setHeaderText("Chcete přidat obrázek k tomuto modelu?");
@@ -684,52 +737,54 @@ public class UIController implements Initializable {
         alert.getButtonTypes().setAll(buttonYes, buttonNo);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonYes){
+        if (result.get() == buttonYes) {
             pridatObrazek.toFront();
-        }else{
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+        } else {
             pridatModel.toFront();
+            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
+
     @FXML
-    public void createUser(ActionEvent actionEvent) throws ParseException{
+    public void createUser(ActionEvent actionEvent) throws ParseException {
         System.out.println("Spuštěno");
-        if (actionEvent.getSource() == createAcc){
+        if (actionEvent.getSource() == createAcc) {
             Users users = new Users();
-            try{
-            users.setUsername(usernameField.getText());
-            System.out.println(usernameField.getText());
-            users.setPassword(passwordField.getText());
-            System.out.println(passwordField.getText());
-            usersService.saveOrUpdate(users);
-            System.out.println(asJson(usersService.getAllUsers()));
-            logIn();
-            }
-            catch (Exception e){
-                headerText = "Prosím vyplňte všechna pole!";
-                alerted();
-                headerText = "";
+            try {
+                users.setUsername(usernameField.getText());
+                System.out.println(usernameField.getText());
+                users.setPassword(passwordField.getText());
+                System.out.println(passwordField.getText());
+                usersService.saveOrUpdate(users);
+                System.out.println(asJson(usersService.getAllUsers()));
+                logIn();
+            } catch (Exception e) {
+                alerted("Prosím vyplňte všechna pole!");
             }
         }
     }
-    public void rememberSbirkaCBox(int rememberName, ComboBox cb){
-        rememberName =  cb.getSelectionModel().getSelectedIndex();
+
+    public void rememberSbirkaCBox(int rememberName, ComboBox cb) {
+        rememberName = cb.getSelectionModel().getSelectedIndex();
         System.out.println(asJson(rememberName));
     }
 
-    public void iRememberSbirkaCBoxName(ComboBox cb, int rememberName){
+    public void iRememberSbirkaCBoxName(ComboBox cb, int rememberName) {
         cb.getSelectionModel().select(rememberName);
         System.out.println(asJson(rememberName));
     }
+
     @Autowired
     private ZnackaRepository znackaRepository;
 
-    public void  DrawSbirkas(){
+    public void DrawSbirkas() {
         Stage stage = (Stage) sbirkyBtn.getScene().getWindow();
         double width = stage.getWidth();
         int numberOfColumns;
         System.out.println(width);
 
-        numberOfColumns = (int) Math.floor((int) width/190) - 1;
+        numberOfColumns = (int) Math.floor((int) width / 190) - 1;
 
         System.out.println(numberOfColumns);
 
@@ -742,9 +797,8 @@ public class UIController implements Initializable {
         grid.setVgap(20);
 
 
-
         int counter = 0;
-        for (Sbirka sbirka: getSbirka()) {
+        for (Sbirka sbirka : getSbirka()) {
             ImageView imageView = new ImageView(new Image("Images/sbirkaFolderIcon.png"));
             imageView.setFitWidth(150);
             imageView.setFitHeight(150);
@@ -755,8 +809,6 @@ public class UIController implements Initializable {
             vbox.setAlignment(Pos.CENTER);
             grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
             counter++;
-
-
             imageView.setId(label.getText());
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -772,7 +824,16 @@ public class UIController implements Initializable {
         sbirkasSP.setContent(grid);
 
     }
-    public void  DrawModels() {
+
+    Modely picModelNumber;
+    int idOfCurrentPic;
+    int modelPicNum;
+    String savedStarterPic = "";
+
+    public void DrawModels() {
+        picsArrayList.clear();
+        modelySP.setContent(null);
+
         Stage stage = (Stage) modelyMenuBtn.getScene().getWindow();
         double width = stage.getWidth();
         int numberOfColumns;
@@ -785,9 +846,9 @@ public class UIController implements Initializable {
         GridPane grid = new GridPane();
 
         grid.setTranslateX(50);
-        grid.setTranslateY(50);
-        grid.setLayoutY(50);
-        grid.setLayoutX(50);
+        grid.setTranslateY(20);
+        grid.setLayoutY(20);
+        grid.setLayoutX(30);
         grid.setHgap(20);
         grid.setVgap(20);
 
@@ -795,11 +856,12 @@ public class UIController implements Initializable {
         int counter = 0;
         String picPath = "Images/sbirkaFolderIcon.png";
         for (Modely modely : getModely()) {
-            for (Pics pics: picsService.getAllPics())
-                    if (pics.getModel_pic().getId() == modely.getId()) {
-                        picPath = pics.getObr();
-                        System.out.println(pics.getObr());
-                    }
+            for (Pics pics : picsService.getAllPics())
+                if (pics.getModel_pic().getId() == modely.getId()) {
+                    picPath = pics.getObr();
+                    System.out.println(pics.getObr());
+                    break;
+                }
             System.out.println(asJson(modely));
             System.out.println(picPath);
             ImageView imageView = new ImageView(new Image(picPath));
@@ -822,12 +884,10 @@ public class UIController implements Initializable {
             grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
             counter++;
 
-
             imageView.setId(label.getText());
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    // Modely detail to front  ----  modelySP.toFront();
                     modelPopisArea.setText(null);
                     cenaDetailTxtB.setText(null);
                     modelNazevDetail.setText(null);
@@ -835,14 +895,25 @@ public class UIController implements Initializable {
                     modelyDetail.toFront();
                     modelNazevDetail.setText(imageView.getId());
                     modelId = modely.getId();
-                    for (Pics pics: picsService.getAllPics()) {
+                    for (Pics pics : picsService.getAllPics()) {
                         if (pics.getModel_pic().getId() == modelId) {
                             modelDetailImage.setImage(new Image(pics.getObr()));
                             System.out.println(pics.getObr());
+                            savedStarterPic = pics.getObr();
+                            picModelNumber = pics.getModel_pic();
+                            modelPicNum = pics.getIdOfPicModel();
+                            System.out.println(modelPicNum);
+                            idOfCurrentPic = pics.getId();
+                            System.out.println(asJson(pics.getModel_pic()));
+                            System.out.println("ID current obr: " + idOfCurrentPic);
+                            System.out.println(asJson(picModelNumber));
+                            picFilter();
+                            break;
+
                         }
                     }
-                    for (Params params: paramsService.getAllParams()){
-                        if (params.getModel_param().getId() == modelId){
+                    for (Params params : paramsService.getAllParams()) {
+                        if (params.getModel_param().getId() == modelId) {
                             modelPopisArea.setText(params.getPopis());
                             cenaDetailTxtB.setText(params.getHodnota());
                             System.out.println(params.getPopis());
@@ -854,14 +925,192 @@ public class UIController implements Initializable {
         }
         modelySP.setContent(grid);
     }
-    public Users UsersSorted(String username, String password){
-        for (Users users : usersService.getAllUsers()){
-            if (username.equals(users.getUsername()) && password.equals(users.getPassword())){
+
+    ArrayList<Pics> picsArrayList = new ArrayList<Pics>();
+    int currentImageIndex = 0;
+
+    public void setImageDetailPrevious() throws ParseException {
+        if (picsArrayList.size() <= 1) {
+            System.out.println("NOTHING HERE");
+            return;
+        }
+
+        currentImageIndex--;
+
+        if (currentImageIndex < 0) {
+            currentImageIndex = picsArrayList.size() - 1;
+        }
+
+        Pics currentPic = picsArrayList.get(currentImageIndex);
+
+        modelDetailImage.setImage(new Image(currentPic.getObr()));
+    }
+
+    public void setImageDetailNext() throws ParseException {
+        if (picsArrayList.size() <= 1) {
+            System.out.println("NOTHING HERE");
+            return;
+        }
+
+        currentImageIndex++;
+
+        if (currentImageIndex >= picsArrayList.size()) {
+            currentImageIndex = 0;
+        }
+
+        Pics currentPic = picsArrayList.get(currentImageIndex);
+
+        modelDetailImage.setImage(new Image(currentPic.getObr()));
+    }
+
+    public void picFilter() {
+        picsArrayList.clear();
+        for (Pics pic : picsService.getAllPics()) {
+            if (pic.getIdOfPicModel() == modelPicNum) {
+                picsArrayList.add(pic);
+                System.out.println("THIS IS CORRECT");
+                System.out.println(asJson(pic));
+            }
+        }
+        System.out.println(asJson(picsArrayList));
+    }
+
+    public void DrawResults() {
+        picsArrayList.clear();
+        vyberSbirkuCB.setPromptText("Vyberte Sbírku");
+        modelySP.setContent(null);
+
+        Stage stage = (Stage) modelyMenuBtn.getScene().getWindow();
+        double width = stage.getWidth();
+        int numberOfColumns;
+        System.out.println(width);
+
+        numberOfColumns = (int) Math.floor((int) width / 190) - 1;
+
+        System.out.println(numberOfColumns);
+
+        GridPane grid = new GridPane();
+
+        grid.setTranslateX(50);
+        grid.setTranslateY(20);
+        grid.setLayoutY(20);
+        grid.setLayoutX(30);
+        grid.setHgap(20);
+        grid.setVgap(20);
+
+        ArrayList<Modely> modelyList = new ArrayList<>();
+        int counter = 0;
+        String picPath = "Images/sbirkaFolderIcon.png";
+        for (Modely modely : searchModels()) {
+            for (Pics pics : picsService.getAllPics())
+                if (pics.getModel_pic().getId() == modely.getId()) {
+                    picPath = pics.getObr();
+                    System.out.println(pics.getObr());
+                    break;
+                }
+            System.out.println(asJson(modely));
+            System.out.println(picPath);
+            ImageView imageView = new ImageView(new Image(picPath));
+            picPath = "Images/sbirkaFolderIcon.png";
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(150);
+
+            String modelyNazev = null;
+            if (modely.getNazev().length() >= 40) {
+                modelyNazev = modely.getNazev().substring(0, 30);
+            } else {
+                modelyNazev = modely.getNazev();
+            }
+            Label label = new Label(modelyNazev);
+            System.out.println(modely.getNazev());
+            label.setTextAlignment(TextAlignment.CENTER);
+            VBox vbox = new VBox(imageView, label);
+            vbox.setAlignment(Pos.CENTER);
+            grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
+            counter++;
+
+            imageView.setId(label.getText());
+            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    modelPopisArea.setText(null);
+                    cenaDetailTxtB.setText(null);
+                    modelNazevDetail.setText(null);
+                    int modelId;
+                    modelyDetail.toFront();
+                    modelNazevDetail.setText(imageView.getId());
+                    modelId = modely.getId();
+                    for (Pics pics : picsService.getAllPics()) {
+                        if (pics.getModel_pic().getId() == modelId) {
+                            modelDetailImage.setImage(new Image(pics.getObr()));
+                            System.out.println(pics.getObr());
+                            savedStarterPic = pics.getObr();
+                            picModelNumber = pics.getModel_pic();
+                            modelPicNum = pics.getIdOfPicModel();
+                            System.out.println(modelPicNum);
+                            idOfCurrentPic = pics.getId();
+                            System.out.println(asJson(pics.getModel_pic()));
+                            System.out.println("ID current obr: " + idOfCurrentPic);
+                            System.out.println(asJson(picModelNumber));
+                            picFilter();
+                            break;
+
+                        }
+                    }
+                    for (Params params : paramsService.getAllParams()) {
+                        if (params.getModel_param().getId() == modelId) {
+                            modelPopisArea.setText(params.getPopis());
+                            cenaDetailTxtB.setText(params.getHodnota());
+                            System.out.println(params.getPopis());
+                        }
+                    }
+                    System.out.println("Klikl jsi na model: " + imageView.getId());
+                }
+            });
+        }
+        modelySP.setContent(grid);
+    }
+
+    public ArrayList<Modely> searchModels() {
+        String searchText = searchModelField.getText();
+        ArrayList<Modely> searchResults = new ArrayList<>();
+
+        for (Modely modely : modelyService.getAllModely()) {
+            if (modely.getNazev().contains(searchText)) {
+                searchResults.add(modely);
+            }
+        }
+        for (Modely result : searchResults) {
+            System.out.println(result.getNazev());
+        }
+        return searchResults;
+    }
+
+    public void ProgressIndicator() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            double currentProgress = progressIndicator.getProgress();
+            if (currentProgress < 1.0) {
+                progressIndicator.setProgress(currentProgress + 0.2);
+            } else {
+                //timeline.stop();
+                Platform.runLater(() -> DrawModels());
+                progressIndicator.setProgress(0);
+            }
+        }));
+        timeline.setCycleCount(5);
+        timeline.play();
+    }
+
+    public Users UsersSorted(String username, String password) {
+        for (Users users : usersService.getAllUsers()) {
+            if (username.equals(users.getUsername()) && password.equals(users.getPassword())) {
                 return users;
             }
         }
         return null;
     }
+
     public int GetIDbyName_Obor(String nazev) {
         for (Modely modely : modelyService.getAllModely()) {
             System.out.println(asJson(modelyService.getAllModely()));
@@ -883,60 +1132,67 @@ public class UIController implements Initializable {
         }
         return null;
     }
-    public Sbirka SbirkasSorted(){
-        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
-            if (sbirkaComboBox.getSelectionModel().equals(sbirka.getPopis())){
+
+    public Sbirka SbirkasSorted() {
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()) {
+            if (sbirkaComboBox.getSelectionModel().equals(sbirka.getPopis())) {
                 return sbirka;
             }
         }
         return null;
     }
-    public Pics PicsSorted(){
-        for (Pics pics : picsService.getAllPics()){
+
+    public Pics PicsSorted() {
+        for (Pics pics : picsService.getAllPics()) {
 
         }
         return null;
     }
-    public Znacka ZnackasSorted(){
-        for (Znacka znacka : znackaService.getAllZnacka()){
-            if (znackaComboBox.getSelectionModel().equals(znacka.getPopis())){
+
+    public Znacka ZnackasSorted() {
+        for (Znacka znacka : znackaService.getAllZnacka()) {
+            if (znackaComboBox.getSelectionModel().equals(znacka.getPopis())) {
                 return znacka;
             }
         }
         return null;
     }
-    public Modely ModelySorted(){
-        for (Modely modely : modelyService.getAllModely()){
-            if (paramsPopisField.getText().equals(modely.getNazev()) && znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())){
+
+    public Modely ModelySorted() {
+        for (Modely modely : modelyService.getAllModely()) {
+            if (paramsPopisField.getText().equals(modely.getNazev()) && znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())) {
                 return modely;
             }
         }
         return null;
     }
+
     public String UsersUsername() {
-        for (Users users : usersService.getAllUsers()){
-            if (usernameField.getText().equals(users.getUsername()) && passwordField.getText().equals(users.getPassword())){
+        for (Users users : usersService.getAllUsers()) {
+            if (usernameField.getText().equals(users.getUsername()) && passwordField.getText().equals(users.getPassword())) {
                 return users.getUsername();
             }
         }
         return null;
     }
+
     public String UsersPassword() {
-        for (Users users : usersService.getAllUsers()){
-            if (usernameField.getText().equals(users.getUsername()) && passwordField.getText().equals(users.getPassword())){
+        for (Users users : usersService.getAllUsers()) {
+            if (usernameField.getText().equals(users.getUsername()) && passwordField.getText().equals(users.getPassword())) {
                 return users.getPassword();
             }
         }
         return null;
     }
+
     @FXML
     public void loginUser(ActionEvent actionEvent) throws ParseException {
         logIn();
     }
-    void logIn(){
-        if (UsersSorted(usernameField.getText(), passwordField.getText()) == null){
-            headerText = "Zadali jste špatnou přezdívku nebo heslo!";
-            alerted();
+
+    void logIn() {
+        if (UsersSorted(usernameField.getText(), passwordField.getText()) == null) {
+            alerted("Zadali jste špatnou přezdívku nebo heslo!");
         } else {
             System.out.println("Login was succesfull");
             System.out.println("Id usera: " + asJson(UsersSorted(usernameField.getText(), passwordField.getText()).getId()));
@@ -954,13 +1210,15 @@ public class UIController implements Initializable {
             pridatObrazekbtn.setDisable(false);
         }
     }
+
     @FXML
-    public void logOutUser(ActionEvent actionEvent) throws ParseException{
+    public void logOutUser(ActionEvent actionEvent) throws ParseException {
         login.toFront();
         logOut();
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(37, 109, 133, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-    void logOut(){
+
+    void logOut() {
         usernameField.setText(null);
         passwordField.setText(null);
         loggedIn = false;
@@ -970,30 +1228,30 @@ public class UIController implements Initializable {
         pridatSbirkuBtn.setDisable(true);
         titleTxt.setText("LOGIN");
         loginBtn.setText("Přihlásit se");
-        headerText = "Odhlásili jsme vás z účtu!";
-        alerted();
+        alerted("Odhlásili jsme vás z účtu!");
     }
 
-    public ArrayList<Znacka> ZnackyAll(){
+    public ArrayList<Znacka> ZnackyAll() {
         ArrayList<Znacka> znackyList = new ArrayList<>();
-        for (Znacka znacka : znackaService.getAllZnacka()){
-            if (znacka.getUser_id() == UsersSorted(usernameField.getText(), passwordField.getText()).getId()){
+        for (Znacka znacka : znackaService.getAllZnacka()) {
+            if (znacka.getUser_id() == UsersSorted(usernameField.getText(), passwordField.getText()).getId()) {
                 znackyList.add(znacka);
             }
         }
         System.out.println(asJson(znackyList));
         return znackyList;
     }
-    public ArrayList<Params> ParamsAll(){
+
+    public ArrayList<Params> ParamsAll() {
         ArrayList<Params> paramsList = new ArrayList<>();
-        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
-            if(SbirkaObrAddCB.getValue() == sbirka.getPopis()){
-                for(Modely modely : modelyService.getAllModely()){
-                    if(modely.getSbirka_id() == sbirka){
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()) {
+            if (SbirkaObrAddCB.getValue() == sbirka.getPopis()) {
+                for (Modely modely : modelyService.getAllModely()) {
+                    if (modely.getSbirka_id() == sbirka) {
                         System.out.println(asJson(modely.getSbirka_id()));
                         System.out.println(asJson(sbirka));
-                        for(Params params : paramsService.getAllParams()){
-                            if(params.getModel_param() == modely){
+                        for (Params params : paramsService.getAllParams()) {
+                            if (params.getModel_param() == modely) {
                                 paramsList.add(params);
                             }
                         }
@@ -1004,7 +1262,11 @@ public class UIController implements Initializable {
         System.out.println(asJson(paramsList));
         return paramsList;
     }
-    public ArrayList<Modely> ModelyChoose(){
+
+    public ArrayList<Modely> ModelyChoose() {
+        picsArrayList.clear();
+        modelySP.setContent(sbirkas11);
+
         Stage stage = (Stage) modelyMenuBtn.getScene().getWindow();
         double width = stage.getWidth();
         int numberOfColumns;
@@ -1017,32 +1279,31 @@ public class UIController implements Initializable {
         GridPane grid = new GridPane();
 
         grid.setTranslateX(50);
-        grid.setTranslateY(50);
-        grid.setLayoutY(50);
-        grid.setLayoutX(50);
+        grid.setTranslateY(20);
+        grid.setLayoutY(20);
+        grid.setLayoutX(30);
         grid.setHgap(20);
         grid.setVgap(20);
 
         ArrayList<Modely> modelyList = new ArrayList<>();
         int counter = 0;
         String picPath = "Images/sbirkaFolderIcon.png";
-        for(Modely modely : modelyService.getAllModely()){
-            if(modely.getSbirka_id().getPopis() == vyberSbirkuCB.getValue()){
-                modelyList.add(modely);
-                System.out.println(asJson(modely));
-
-                picPath = "Images/sbirkaFolderIcon.png";
-
-                for (Pics pics: picsService.getAllPics())
+        for (Modely modely : getModely()) {
+            if (modely.getSbirka_id().getPopis() == vyberSbirkuCB.getValue()) {
+                for (Pics pics : picsService.getAllPics())
                     if (pics.getModel_pic().getId() == modely.getId()) {
                         picPath = pics.getObr();
                         System.out.println(pics.getObr());
+                        break;
                     }
+                System.out.println(asJson(modely));
+                System.out.println(picPath);
                 ImageView imageView = new ImageView(new Image(picPath));
+                picPath = "Images/sbirkaFolderIcon.png";
                 imageView.setPreserveRatio(true);
                 imageView.setFitWidth(150);
                 imageView.setFitHeight(150);
-                picPath = "Images/sbirkaFolderIcon.png";
+
                 String modelyNazev = null;
                 if (modely.getNazev().length() >= 40) {
                     modelyNazev = modely.getNazev().substring(0, 30);
@@ -1057,12 +1318,10 @@ public class UIController implements Initializable {
                 grid.add(vbox, counter % numberOfColumns, counter / numberOfColumns);
                 counter++;
 
-
                 imageView.setId(label.getText());
                 imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        // Modely detail to front  ----  modelySP.toFront();
                         modelPopisArea.setText(null);
                         cenaDetailTxtB.setText(null);
                         modelNazevDetail.setText(null);
@@ -1070,18 +1329,28 @@ public class UIController implements Initializable {
                         modelyDetail.toFront();
                         modelNazevDetail.setText(imageView.getId());
                         modelId = modely.getId();
-                        for (Pics pics: picsService.getAllPics()) {
+                        for (Pics pics : picsService.getAllPics()) {
                             if (pics.getModel_pic().getId() == modelId) {
                                 modelDetailImage.setImage(new Image(pics.getObr()));
                                 System.out.println(pics.getObr());
+                                savedStarterPic = pics.getObr();
+                                picModelNumber = pics.getModel_pic();
+                                modelPicNum = pics.getIdOfPicModel();
+                                System.out.println(modelPicNum);
+                                idOfCurrentPic = pics.getId();
+                                System.out.println(asJson(pics.getModel_pic()));
+                                System.out.println("ID current obr: " + idOfCurrentPic);
+                                System.out.println(asJson(picModelNumber));
+                                picFilter();
+                                break;
+
                             }
                         }
-                        for (Params params: paramsService.getAllParams()){
-                            if (params.getModel_param().getId() == modelId){
+                        for (Params params : paramsService.getAllParams()) {
+                            if (params.getModel_param().getId() == modelId) {
                                 modelPopisArea.setText(params.getPopis());
                                 cenaDetailTxtB.setText(params.getHodnota());
                                 System.out.println(params.getPopis());
-
                             }
                         }
                         System.out.println("Klikl jsi na model: " + imageView.getId());
@@ -1092,50 +1361,57 @@ public class UIController implements Initializable {
         modelySP.setContent(grid);
         return modelyList;
     }
-    public void ZnackyToComboBox(ComboBox znackaComboBox){
+
+    public void ZnackyToComboBox(ComboBox znackaComboBox) {
         znackaComboBox.getItems().clear();
-        for (Znacka znacka : ZnackyAll()){
+        for (Znacka znacka : ZnackyAll()) {
             znackaComboBox.getItems().add(znacka.getPopis());
         }
     }
-    public ArrayList<Sbirka> SbirkyAll(){
+
+    public ArrayList<Sbirka> SbirkyAll() {
         ArrayList<Sbirka> sbirkyList = new ArrayList<>();
-        for (Sbirka sbirka : sbirkaService.getAllSbirka()){
-            if (getSbirka().equals(UsersSorted(usernameField.getText(), passwordField.getText()).getId())){
+        for (Sbirka sbirka : sbirkaService.getAllSbirka()) {
+            if (getSbirka().equals(UsersSorted(usernameField.getText(), passwordField.getText()).getId())) {
                 sbirkyList.add(sbirka);
             }
         }
         System.out.println(asJson(sbirkyList));
         return sbirkyList;
     }
-    public ArrayList<Modely> ModelyAll(){
+
+    public ArrayList<Modely> ModelyAll() {
         ArrayList<Modely> modelyList = new ArrayList<>();
-        for (Modely modely : modelyService.getAllModely()){
+        for (Modely modely : modelyService.getAllModely()) {
             System.out.println(asJson(modelyService.getAllModely()));
             System.out.println(modely.getPopisSbirka());
             System.out.println(SbirkaObrAddCB.getValue());
-            if (modely.getPopisSbirka().equals(SbirkaObrAddCB.getValue())){
+            if (modely.getPopisSbirka().equals(SbirkaObrAddCB.getValue())) {
                 modelyList.add(modely);
             }
         }
         System.out.println(asJson(modelyList));
         return modelyList;
     }
-    public void ModelyToComboBox(){
+
+    public void ModelyToComboBox() {
         ModelObrAddCB.getItems().clear();
-        for (Modely modely : ModelyAll()){
+        for (Modely modely : ModelyAll()) {
             ModelObrAddCB.getItems().add(modely.getNazev());
         }
     }
-    public void ParamsToComboBox(){
+
+    public void ParamsToComboBox() {
         ModelObrAddCB.getItems().clear();
-        for (Params params : ParamsAll()){
+        for (Params params : ParamsAll()) {
             ModelObrAddCB.getItems().add(params.getPopis());
         }
     }
-    public void SbirkyToComboBox(ComboBox sbirkaComboBox){
+
+    public void SbirkyToComboBox(ComboBox sbirkaComboBox) {
         sbirkaComboBox.getItems().clear();
-        for (Sbirka sbirka : getSbirka()){
+        //sbirkaComboBox.getItems().add("Všechny modely");
+        for (Sbirka sbirka : getSbirka()) {
             sbirkaComboBox.getItems().add(sbirka.getPopis());
         }
     }

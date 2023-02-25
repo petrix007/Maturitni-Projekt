@@ -35,6 +35,10 @@ public class Pics {
         this.model_pic = model_pic;
     }
 
+    public int getIdOfPicModel(){
+        return model_pic.getId();
+    }
+
 
     public String getObr() {
         return obr;

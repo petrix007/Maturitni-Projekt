@@ -53,6 +53,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -67,6 +68,8 @@ public class UIController implements Initializable {
     @FXML
     private ImageView pridatModelMenuBtn;
     @FXML
+    private BorderPane modelyEditPane;
+    @FXML
     private ImageView pridatObrazekMenuBtn;
     @FXML
     private ImageView topLeftLogoImg;
@@ -74,6 +77,34 @@ public class UIController implements Initializable {
     private ImageView pridatSbirkuMenuBtn;
     @FXML
     private BorderPane progressBP;
+    @FXML
+    private Button editAddObr;
+
+    @FXML
+    private TextField editCenaCurrentTXTF;
+
+    @FXML
+    private Button editModelBtn;
+    @FXML
+    private ComboBox<?> editNewSbirkaCB;
+
+    @FXML
+    private ComboBox<?> editNewZnackaCB;
+
+    @FXML
+    private Button editModelBtn1;
+
+    @FXML
+    private Label editModelNazevCurrentL;
+
+    @FXML
+    private TextField editNameCurrentTXTF;
+
+    @FXML
+    private Button editObrBTN;
+
+    @FXML
+    private TextArea editPopisCurrentTXTA;
     @FXML
     private ProgressBar progressIndicator;
     @FXML
@@ -112,11 +143,24 @@ public class UIController implements Initializable {
     @FXML
     private ComboBox<String> vyberSbirkuCB;
     @FXML
+    private ComboBox<String> editSbirkaCBCurrent;
+
+    @FXML
+    private ComboBox<String> editZnačkaCurrentCB;
+    @FXML
     private ImageView backFromDetail;
     @FXML
     private Button nextObrAdd1;
     @FXML
     private BorderPane modelyDetail;
+    @FXML
+    private TextField editNewCenaTXTF;
+
+    @FXML
+    private TextField editNewNazevTXTF;
+
+    @FXML
+    private TextArea editNewPopisTXTA;
     @FXML
     private ImageView modelDetailImage;
     @FXML
@@ -340,7 +384,6 @@ public class UIController implements Initializable {
         }
         System.exit(40);
     }
-
     @FXML
     private void handleClick(ActionEvent event) {
         if (event.getSource() == loginBtn & !loggedIn) {
@@ -437,8 +480,30 @@ public class UIController implements Initializable {
             pridatObrazekWithout.toFront();
             SbirkyToComboBox(SbirkaObrAddCB);
         }
+        if (event.getSource() == editModelBtn){
+            modelyEditPane.toFront();
+            titleTxt.setText("UPRAVIT MODEL");
+            takeInfoFromDetailToEditP();
+        }
     }
 
+    public void takeInfoFromDetailToEditP(){
+        String modelNazev = modelNazevDetail.getText();
+        String modelPopis = modelPopisArea.getText();
+        String modelCena = cenaDetailTxtB.getText();
+
+        editModelNazevCurrentL.setText(modelNazev);
+        editNameCurrentTXTF.setText(modelNazev);
+        editPopisCurrentTXTA.setText(modelPopis);
+        editCenaCurrentTXTF.setText(modelCena);
+
+        SbirkyToComboBox(editNewSbirkaCB);
+        ZnackyToComboBox(editNewZnackaCB);
+
+        editNewNazevTXTF.setText(modelNazev);
+        editNewPopisTXTA.setText(modelPopis);
+        editNewCenaTXTF.setText(modelCena);
+    }
     public void pridatObrEditMode() throws ParseException {
         pridatObrazekWithout.toFront();
         for (Modely modely : modelyService.getAllModely()) {
@@ -451,59 +516,55 @@ public class UIController implements Initializable {
             }
         }
     }
-
     public void profilToFront() throws ParseException {
         loggedUser.toFront();
         titleTxt.setText("PROFIL");
     }
-
     public void modelyShowToFront() throws ParseException {
         searchBarModels.toFront();
         SbirkyToComboBox(vyberSbirkuCB);
         titleTxt.setText("MODELY");
     }
-
     public void sbirkySPToFront() throws ParseException {
         sbirkasSP.toFront();
         DrawSbirkas();
         titleTxt.setText("SBÍRKY");
     }
-
     public void obrCreateToFront() throws ParseException {
         pridatObrazekWithout.toFront();
         titleTxt.setText("VYTVOŘTE OBRÁZEK");
     }
-
     public void modelyToFront() throws ParseException {
         pridatModel.toFront();
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
         titleTxt.setText("VYTVOŘTE MODEL");
     }
-
     public void sbirkasToFront() throws ParseException {
         pridatSbirku.toFront();
         titleTxt.setText("VYTVOŘTE SBÍRKU");
     }
-
     @FXML
     public void ibackFromCreateZnackaPane() throws ParseException {
         pridatModel.toFront();
         titleTxt.setText("VYTVOŘTE ZNAČKU");
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 13, 135, 1), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-
     @FXML
     public void backFromDetail() throws ParseException {
         searchBarModels.toFront();
         modelDetailImage.setImage(new Image("Images/sbirkaFolderIcon.png"));
         titleTxt.setText("MODELY");
     }
-
     @FXML
     public void ibackFromPridatObrazek() throws ParseException {
         pridatModel.toFront();
         titleTxt.setText("VYBERTE OBRÁZKY");
         titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+    @FXML
+    public void backFromEdit() throws ParseException{
+        modelyDetail.toFront();
+        titleTxt.setText("MODELY");
     }
 
     @FXML
@@ -606,7 +667,7 @@ public class UIController implements Initializable {
         Params params = new Params();
 
         SbirkasSorted();
-        ZnackasSorted();
+         ZnackasSorted();
         ModelySorted();
 
         params.setPopis(paramsPopisField.getText());
@@ -1055,7 +1116,6 @@ public class UIController implements Initializable {
                             System.out.println(asJson(picModelNumber));
                             picFilter();
                             break;
-
                         }
                     }
                     for (Params params : paramsService.getAllParams()) {
@@ -1075,15 +1135,71 @@ public class UIController implements Initializable {
     public ArrayList<Modely> searchModels() {
         String searchText = searchModelField.getText();
         ArrayList<Modely> searchResults = new ArrayList<>();
+        HashSet<Integer> addedModelIds = new HashSet<>();
 
-        for (Modely modely : modelyService.getAllModely()) {
-            if (modely.getNazev().contains(searchText)) {
-                searchResults.add(modely);
+        // Convert the search text to lowercase
+        String searchTextLower = searchText.toLowerCase();
+
+        // Get the currently selected Sbirka object from the ComboBox
+        String selectedSbirka = vyberSbirkuCB.getValue();
+
+        // Loop through all possible combinations of uppercase and lowercase letters in the search text
+        for (int i = 0; i < searchText.length(); i++) {
+            StringBuilder sb = new StringBuilder(searchTextLower);
+            sb.setCharAt(i, Character.toUpperCase(searchText.charAt(i)));
+            String searchTextMixed = sb.toString();
+
+            // Search for matching model names using the mixed-case search text and the selected Sbirka object
+            for (Modely modely : modelyService.getAllModely()) {
+                if (modely.getSbirka_id().getPopis().equals(selectedSbirka) &&
+                        modely.getNazev().toLowerCase().contains(searchTextMixed.toLowerCase()) &&
+                        !addedModelIds.contains(modely.getId())) {
+                    searchResults.add(modely);
+                    addedModelIds.add(modely.getId());
+                }
             }
         }
-        for (Modely result : searchResults) {
-            System.out.println(result.getNazev());
+
+        // Check if any search results were found
+        if (searchResults.isEmpty()) {
+            System.out.println("NOTHING FOUND");
+        } else {
+            // Do something with the search results
+            // For example, print the results to the console
+            for (Modely result : searchResults) {
+                System.out.println(result.getNazev());
+            }
         }
+        //String searchText = searchModelField.getText();
+        //ArrayList<Modely> searchResults = new ArrayList<>();
+        //HashSet<Integer> addedModelIds = new HashSet<>();
+//
+        //String searchTextLower = searchText.toLowerCase();
+//
+        //for (int i = 0; i < searchText.length(); i++) {
+        //    StringBuilder sb = new StringBuilder(searchTextLower);
+        //    sb.setCharAt(i, Character.toUpperCase(searchText.charAt(i)));
+        //    String searchTextMixed = sb.toString();
+//
+        //    // Search for matching model names using the mixed-case search text
+        //    for (Modely modely : modelyService.getAllModely()) {
+        //        if (modely.getNazev().toLowerCase().contains(searchTextMixed.toLowerCase()) &&
+        //                !addedModelIds.contains(modely.getId())) {
+        //            searchResults.add(modely);
+        //            addedModelIds.add(modely.getId());
+        //        }
+        //    }
+        //}
+        //if (searchResults.isEmpty()) {
+        //    System.out.println("NOTHING FOUND");
+        //    DrawModels();
+        //} else {
+        //    // Do something with the search results
+        //    // For example, print the results to the console
+        //    for (Modely result : searchResults) {
+        //        System.out.println(result.getNazev());
+        //    }
+        //}
         return searchResults;
     }
 

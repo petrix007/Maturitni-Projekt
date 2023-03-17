@@ -1,9 +1,6 @@
 package Projekt.sbirka.Entity;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
-
 @Entity
 @Table
 public class Modely {
@@ -16,12 +13,8 @@ public class Modely {
     @ManyToOne
     @JoinColumn(name = "znacka_id")
     private Znacka znacka_id;
-
-
-
     @Column
     private String nazev;
-
     public int getId() {
         return id;
     }

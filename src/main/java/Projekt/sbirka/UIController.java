@@ -4,8 +4,6 @@ import Projekt.sbirka.Entity.*;
 import Projekt.sbirka.Repository.*;
 import Projekt.sbirka.Service.*;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
@@ -38,7 +36,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import org.apache.catalina.User;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.annotations.AttributeAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -577,9 +574,7 @@ public class UIController implements Initializable {
                 String name = sbirkaName.getText();
                 sbirka.setPopis(name);
                 sbirka.setZalozeno(String.valueOf(sbirkaCreateDate.getValue()));
-                System.out.println(asJson(sbirka));
                 sbirkaService.saveOrUpdate(sbirka);
-                System.out.println(asJson(sbirkaService.getAllSbirka()));
             } catch (Exception e) {
                 if (sbirkaName.getText() == null) {
                     System.out.println(" Upozorneni CHYBA Zadejte prosim nazev sbirky.");
@@ -598,7 +593,6 @@ public class UIController implements Initializable {
                 list.add(sbirka);
             }
         }
-        System.out.println(asJson(list));
         return list;
     }
 
@@ -606,23 +600,13 @@ public class UIController implements Initializable {
         ArrayList<Modely> list = new ArrayList<>();
         for (Modely modely : modelyService.getAllModely()) {
             if (modely.getUserByModel().getId() == UsersSorted(usernameField.getText(), passwordField.getText()).getId()) {
-                System.out.println(asJson(modely.getSbirka_id().getId()));
                 System.out.println(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
-                System.out.println(asJson(modely));
                 list.add(modely);
             }
         }
-        System.out.println(asJson(list));
         return list;
     }
 
-    private static String asJson(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @FXML
     public void createZnacka(ActionEvent actionEvent) throws ParseException {
@@ -674,12 +658,7 @@ public class UIController implements Initializable {
         params.setPopis(paramsPopisField.getText());
         params.setHodnota(paramsHodnotaField.getText());
         params.setModel_param(modely);
-        System.out.println(asJson(modely));
         paramsService.saveOrUpdate(params);
-        System.out.println(asJson(params));
-
-        System.out.println(asJson(sbirkaComboBox.getSelectionModel().selectedItemProperty().getValue()));
-        System.out.println(asJson(znackaComboBox.getSelectionModel().selectedItemProperty().getValue()));
 
         wannaAddObrAlert();
     }
@@ -704,9 +683,7 @@ public class UIController implements Initializable {
 
     public Modely findModelyFromComboBoxValue() {
         for (Modely modely : modelyService.getAllModely()) {
-            System.out.println(asJson(modely));
             System.out.println(modely.getNazev());
-            System.out.println(asJson(modelyService.getAllModely()));
             if (nazevModelsField.getText().equals(modely.getNazev()) && znackaComboBox.getValue().equals(modely.getZnacka_id()) && sbirkaComboBox.getValue().equals(modely.getSbirka_id())) {
 
                 return modely;
@@ -762,7 +739,6 @@ public class UIController implements Initializable {
         pics.setObr(obrazekPath);
         pics.setPopis(pathShow.getText());
         picsService.saveOrUpdate(pics);
-        System.out.println(asJson(pics));
     }
 
     public void createObrazekAlone(ActionEvent actionEvent) throws ParseException {
@@ -774,7 +750,6 @@ public class UIController implements Initializable {
         pics.setPopis(pathShow1.getText());
         System.out.println(pathShow1.getText());
         picsService.saveOrUpdate(pics);
-        System.out.println(asJson(pics));
     }
 
     public void alerted(String headerText) {
@@ -819,7 +794,6 @@ public class UIController implements Initializable {
                 users.setPassword(passwordField.getText());
                 System.out.println(passwordField.getText());
                 usersService.saveOrUpdate(users);
-                System.out.println(asJson(usersService.getAllUsers()));
                 logIn();
             } catch (Exception e) {
                 alerted("Prosím vyplňte všechna pole!");
@@ -829,12 +803,10 @@ public class UIController implements Initializable {
 
     public void rememberSbirkaCBox(int rememberName, ComboBox cb) {
         rememberName = cb.getSelectionModel().getSelectedIndex();
-        System.out.println(asJson(rememberName));
     }
 
     public void iRememberSbirkaCBoxName(ComboBox cb, int rememberName) {
         cb.getSelectionModel().select(rememberName);
-        System.out.println(asJson(rememberName));
     }
 
     @Autowired
@@ -924,7 +896,6 @@ public class UIController implements Initializable {
                     System.out.println(pics.getObr());
                     break;
                 }
-            System.out.println(asJson(modely));
             System.out.println(picPath);
             ImageView imageView = new ImageView(new Image(picPath));
             picPath = "Images/sbirkaFolderIcon.png";
@@ -966,9 +937,7 @@ public class UIController implements Initializable {
                             modelPicNum = pics.getIdOfPicModel();
                             System.out.println(modelPicNum);
                             idOfCurrentPic = pics.getId();
-                            System.out.println(asJson(pics.getModel_pic()));
                             System.out.println("ID current obr: " + idOfCurrentPic);
-                            System.out.println(asJson(picModelNumber));
                             picFilter();
                             break;
 
@@ -1031,10 +1000,8 @@ public class UIController implements Initializable {
             if (pic.getIdOfPicModel() == modelPicNum) {
                 picsArrayList.add(pic);
                 System.out.println("THIS IS CORRECT");
-                System.out.println(asJson(pic));
             }
         }
-        System.out.println(asJson(picsArrayList));
     }
 
     public void DrawResults() {
@@ -1070,7 +1037,6 @@ public class UIController implements Initializable {
                     System.out.println(pics.getObr());
                     break;
                 }
-            System.out.println(asJson(modely));
             System.out.println(picPath);
             ImageView imageView = new ImageView(new Image(picPath));
             picPath = "Images/sbirkaFolderIcon.png";
@@ -1112,9 +1078,7 @@ public class UIController implements Initializable {
                             modelPicNum = pics.getIdOfPicModel();
                             System.out.println(modelPicNum);
                             idOfCurrentPic = pics.getId();
-                            System.out.println(asJson(pics.getModel_pic()));
                             System.out.println("ID current obr: " + idOfCurrentPic);
-                            System.out.println(asJson(picModelNumber));
                             picFilter();
                             break;
                         }
@@ -1194,7 +1158,6 @@ public class UIController implements Initializable {
 
     public int GetIDbyName_Obor(String nazev) {
         for (Modely modely : modelyService.getAllModely()) {
-            System.out.println(asJson(modelyService.getAllModely()));
             System.out.println(nazev);
             System.out.println(modely.getNazev());
             if (modely.getNazev().equals(nazev)) {
@@ -1276,7 +1239,6 @@ public class UIController implements Initializable {
             alerted("Zadali jste špatnou přezdívku nebo heslo!");
         } else {
             System.out.println("Login was succesfull");
-            System.out.println("Id usera: " + asJson(UsersSorted(usernameField.getText(), passwordField.getText()).getId()));
             loginBtn.setText(UsersUsername());
             usernameLabel.setText("Přezdívka: " + UsersUsername());
             modelCountLabel.setText("Počet modelů: " + getModely().size());
@@ -1319,7 +1281,6 @@ public class UIController implements Initializable {
                 znackyList.add(znacka);
             }
         }
-        System.out.println(asJson(znackyList));
         return znackyList;
     }
 
@@ -1329,8 +1290,6 @@ public class UIController implements Initializable {
             if (SbirkaObrAddCB.getValue() == sbirka.getPopis()) {
                 for (Modely modely : modelyService.getAllModely()) {
                     if (modely.getSbirka_id() == sbirka) {
-                        System.out.println(asJson(modely.getSbirka_id()));
-                        System.out.println(asJson(sbirka));
                         for (Params params : paramsService.getAllParams()) {
                             if (params.getModel_param() == modely) {
                                 paramsList.add(params);
@@ -1340,7 +1299,6 @@ public class UIController implements Initializable {
                 }
             }
         }
-        System.out.println(asJson(paramsList));
         return paramsList;
     }
 
@@ -1377,7 +1335,6 @@ public class UIController implements Initializable {
                         System.out.println(pics.getObr());
                         break;
                     }
-                System.out.println(asJson(modely));
                 System.out.println(picPath);
                 ImageView imageView = new ImageView(new Image(picPath));
                 picPath = "Images/sbirkaFolderIcon.png";
@@ -1419,9 +1376,7 @@ public class UIController implements Initializable {
                                 modelPicNum = pics.getIdOfPicModel();
                                 System.out.println(modelPicNum);
                                 idOfCurrentPic = pics.getId();
-                                System.out.println(asJson(pics.getModel_pic()));
                                 System.out.println("ID current obr: " + idOfCurrentPic);
-                                System.out.println(asJson(picModelNumber));
                                 picFilter();
                                 break;
 
@@ -1457,21 +1412,18 @@ public class UIController implements Initializable {
                 sbirkyList.add(sbirka);
             }
         }
-        System.out.println(asJson(sbirkyList));
         return sbirkyList;
     }
 
     public ArrayList<Modely> ModelyAll() {
         ArrayList<Modely> modelyList = new ArrayList<>();
         for (Modely modely : modelyService.getAllModely()) {
-            System.out.println(asJson(modelyService.getAllModely()));
             System.out.println(modely.getPopisSbirka());
             System.out.println(SbirkaObrAddCB.getValue());
             if (modely.getPopisSbirka().equals(SbirkaObrAddCB.getValue())) {
                 modelyList.add(modely);
             }
         }
-        System.out.println(asJson(modelyList));
         return modelyList;
     }
 

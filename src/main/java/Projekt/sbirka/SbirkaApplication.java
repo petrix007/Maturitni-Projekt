@@ -32,6 +32,7 @@ public class SbirkaApplication extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+
 		this.context.publishEvent(new StageReadyEvent(stage));
 	}
 
@@ -42,6 +43,7 @@ public class SbirkaApplication extends Application {
 	}
 }
 class StageReadyEvent extends ApplicationEvent {
+
 	public Stage getStage(){
 		return Stage.class.cast(getSource());
 	}

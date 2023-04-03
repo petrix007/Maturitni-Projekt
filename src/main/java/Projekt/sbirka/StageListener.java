@@ -22,7 +22,7 @@ public class StageListener implements ApplicationListener<Projekt.sbirka.StageRe
     private final Resource fxml;
     private final ApplicationContext ac;
 
-    StageListener(@Value("{$spring.application.ui.title}") String applicationTitle,
+    StageListener(@Value("Sbírej s klidem") String applicationTitle,
                   @Value("classpath:/UI.fxml") Resource resource, ApplicationContext ac){
         this.applicationTitle = applicationTitle;
         this.fxml = resource;

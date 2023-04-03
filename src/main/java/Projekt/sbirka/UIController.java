@@ -309,6 +309,7 @@ public class UIController implements Initializable {
             zustanPrihlasenCheckBox.setSelected(true);
         } catch (Exception e) {
         }
+        login.toFront();
     }
 
     @FXML
@@ -1137,19 +1138,15 @@ public class UIController implements Initializable {
         ArrayList<Modely> searchResults = new ArrayList<>();
         HashSet<Integer> addedModelIds = new HashSet<>();
 
-        // Convert the search text to lowercase
         String searchTextLower = searchText.toLowerCase();
 
-        // Get the currently selected Sbirka object from the ComboBox
         String selectedSbirka = vyberSbirkuCB.getValue();
 
-        // Loop through all possible combinations of uppercase and lowercase letters in the search text
         for (int i = 0; i < searchText.length(); i++) {
             StringBuilder sb = new StringBuilder(searchTextLower);
             sb.setCharAt(i, Character.toUpperCase(searchText.charAt(i)));
             String searchTextMixed = sb.toString();
 
-            // Search for matching model names using the mixed-case search text and the selected Sbirka object
             for (Modely modely : modelyService.getAllModely()) {
                 if (modely.getSbirka_id().getPopis().equals(selectedSbirka) &&
                         modely.getNazev().toLowerCase().contains(searchTextMixed.toLowerCase()) &&
@@ -1160,46 +1157,14 @@ public class UIController implements Initializable {
             }
         }
 
-        // Check if any search results were found
         if (searchResults.isEmpty()) {
             System.out.println("NOTHING FOUND");
         } else {
-            // Do something with the search results
-            // For example, print the results to the console
             for (Modely result : searchResults) {
                 System.out.println(result.getNazev());
             }
         }
-        //String searchText = searchModelField.getText();
-        //ArrayList<Modely> searchResults = new ArrayList<>();
-        //HashSet<Integer> addedModelIds = new HashSet<>();
-//
-        //String searchTextLower = searchText.toLowerCase();
-//
-        //for (int i = 0; i < searchText.length(); i++) {
-        //    StringBuilder sb = new StringBuilder(searchTextLower);
-        //    sb.setCharAt(i, Character.toUpperCase(searchText.charAt(i)));
-        //    String searchTextMixed = sb.toString();
-//
-        //    // Search for matching model names using the mixed-case search text
-        //    for (Modely modely : modelyService.getAllModely()) {
-        //        if (modely.getNazev().toLowerCase().contains(searchTextMixed.toLowerCase()) &&
-        //                !addedModelIds.contains(modely.getId())) {
-        //            searchResults.add(modely);
-        //            addedModelIds.add(modely.getId());
-        //        }
-        //    }
-        //}
-        //if (searchResults.isEmpty()) {
-        //    System.out.println("NOTHING FOUND");
-        //    DrawModels();
-        //} else {
-        //    // Do something with the search results
-        //    // For example, print the results to the console
-        //    for (Modely result : searchResults) {
-        //        System.out.println(result.getNazev());
-        //    }
-        //}
+
         return searchResults;
     }
 

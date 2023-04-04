@@ -503,36 +503,6 @@
                   </ScrollPane>
                </center>
             </BorderPane>
-            <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="usernameLabel" alignment="CENTER" text="Prezdivka: none" textAlignment="CENTER">
-                           <font>
-                              <Font size="36.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="sbirkaCountLabel" text="Počet Sbírek: none">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="modelCountLabel" text="Počet Modelů: none">
-                           <font>
-                              <Font size="25.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-               </center>
-               <bottom>
-                  <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOutUser" style="-fx-background-color: #ff5252;" text="ODHLÁSIT SE" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" right="50.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
-            </BorderPane>
             <ScrollPane fx:id="sbirkasSP" prefHeight="593.0" prefWidth="606.0">
               <content>
                 <AnchorPane fx:id="anchorSbirky" minHeight="0.0" minWidth="0.0" prefWidth="598.0">
@@ -812,6 +782,41 @@
                      </BorderPane.margin>
                   </ImageView>
                </top>
+            </BorderPane>
+            <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/usericon.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="usernameLabel" alignment="CENTER" text="Prezdivka: none" textAlignment="CENTER">
+                           <font>
+                              <Font size="39.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="sbirkaCountLabel" text="Počet Sbírek: none">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="modelCountLabel" text="Počet Modelů: none">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </center>
+               <bottom>
+                  <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOutUser" style="-fx-background-color: #ff5252;" text="ODHLÁSIT SE" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
+                     <BorderPane.margin>
+                        <Insets bottom="10.0" right="50.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </bottom>
             </BorderPane>
          </children>
       </StackPane>

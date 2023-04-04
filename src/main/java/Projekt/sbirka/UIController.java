@@ -574,14 +574,18 @@ public class UIController implements Initializable {
     public void createSbirka(ActionEvent actionEvent) throws ParseException {
         if (actionEvent.getSource() == vytvorSbirku) {
             Sbirka sbirka = new Sbirka();
-            try {
-                sbirka.setUsers_id(UsersSorted(usernameField.getText(), passwordField.getText()));
-                String name = sbirkaName.getText();
-                sbirka.setPopis(name);
-                sbirka.setZalozeno(String.valueOf(sbirkaCreateDate.getValue()));
-                sbirkaService.saveOrUpdate(sbirka);
-            } catch (Exception e) {
-                alerted("Zadejte platné hodnoty!");
+            if (name == null){
+                alerted("ZADEJTE HODNOTY!");
+            }else {
+                try {
+                    sbirka.setUsers_id(UsersSorted(usernameField.getText(), passwordField.getText()));
+                    String name = sbirkaName.getText();
+                    sbirka.setPopis(name);
+                    sbirka.setZalozeno(String.valueOf(sbirkaCreateDate.getValue()));
+                    sbirkaService.saveOrUpdate(sbirka);
+                } catch (Exception e) {
+                    alerted("Zadejte platné hodnoty!");
+                }
             }
         }
     }
@@ -610,16 +614,18 @@ public class UIController implements Initializable {
     @FXML
     public void createZnacka(ActionEvent actionEvent) throws ParseException {
         if (actionEvent.getSource() == createZnacka) {
-            Znacka znacka = new Znacka();
-
-            znacka.setPopis(znackaNameField.getText());
-            znacka.setUser_id(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
-            znackaService.saveOrUpdate(znacka);
-            alerted("Značka byla úspěšně vytvořena!");
-            pridatModel.toFront();
-            titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
-            znackaNameField.setText(null);
-
+            if (znackaNameField.getText() != null){
+                Znacka znacka = new Znacka();
+                znacka.setPopis(znackaNameField.getText());
+                znacka.setUser_id(UsersSorted(usernameField.getText(), passwordField.getText()).getId());
+                znackaService.saveOrUpdate(znacka);
+                alerted("Značka byla úspěšně vytvořena!");
+                pridatModel.toFront();
+                titleColor.setBackground(new Background(new BackgroundFill(Color.rgb(67, 43, 155, 1), CornerRadii.EMPTY, Insets.EMPTY)));
+                znackaNameField.setText(null);
+            }else {
+                alerted("ZADEJTE SPRÁVNÉ HODNOTY!");
+            }
         }
         SbirkyToComboBox(sbirkaComboBox);
         ZnackyToComboBox(znackaComboBox);
@@ -632,34 +638,37 @@ public class UIController implements Initializable {
 
     @FXML
     public void createModel(ActionEvent actionEvent) throws ParseException {
-        Modely modely = new Modely();
+        if (nazevModelsField.getText() != null){
+            Modely modely = new Modely();
 
-        SbirkasSorted();
-        ZnackasSorted();
-        ModelySorted();
-        modely.setNazev(nazevModelsField.getText());
-        modely.setSbirka_id(findSbirkaFromComboBoxValue(sbirkaComboBox));
-        modely.setZnacka_id(findZnackaFromComboBoxValue(znackaComboBox));
+            SbirkasSorted();
+            ZnackasSorted();
+            ModelySorted();
+            modely.setNazev(nazevModelsField.getText());
+            modely.setSbirka_id(findSbirkaFromComboBoxValue(sbirkaComboBox));
+            modely.setZnacka_id(findZnackaFromComboBoxValue(znackaComboBox));
 
+            modelId = modely.getId();
 
-        modelId = modely.getId();
+            modelyService.saveOrUpdate(modely);
 
-        modelyService.saveOrUpdate(modely);
+            Params params = new Params();
 
-        alerted("Model byl úspěšně vytvořen");
+            SbirkasSorted();
+            ZnackasSorted();
+            ModelySorted();
 
-        Params params = new Params();
+            params.setPopis(paramsPopisField.getText());
+            params.setHodnota(paramsHodnotaField.getText());
+            params.setModel_param(modely);
+            paramsService.saveOrUpdate(params);
 
-        SbirkasSorted();
-         ZnackasSorted();
-        ModelySorted();
+            alerted("Model byl úspěšně vytvořen");
+            wannaAddObrAlert();
 
-        params.setPopis(paramsPopisField.getText());
-        params.setHodnota(paramsHodnotaField.getText());
-        params.setModel_param(modely);
-        paramsService.saveOrUpdate(params);
-
-        wannaAddObrAlert();
+        }else {
+            alerted("ZADEJTE HODNOTY!");
+        }
     }
 
     public Sbirka findSbirkaFromComboBoxValue(ComboBox<String> sbirkaComboBox) {
@@ -732,17 +741,26 @@ public class UIController implements Initializable {
                 pics.setModel_pic(modely);
             }
         }
-        pics.setObr(obrazekPath);
-        pics.setPopis(pathShow.getText());
-        picsService.saveOrUpdate(pics);
+        if (obrazekPath == null || pathShow.getText() == null){
+            alerted("Vyplňte pole!");
+        }else{
+            pics.setObr(obrazekPath);
+            pics.setPopis(pathShow.getText());
+            picsService.saveOrUpdate(pics);
+        }
     }
 
     public void createObrazekAlone(ActionEvent actionEvent) throws ParseException {
         Pics pics = new Pics();
-        pics.setModel_pic(GetModelById(GetIDbyName_Obor(ModelObrAddCB.getValue())));
-        pics.setObr(obrazekPath);
-        pics.setPopis(pathShow1.getText());
-        picsService.saveOrUpdate(pics);
+        if (obrazekPath == null || pathShow.getText() == null){
+            alerted("Vyplňte pole!");
+        }else{
+            pics.setModel_pic(GetModelById(GetIDbyName_Obor(ModelObrAddCB.getValue())));
+            pics.setObr(obrazekPath);
+            pics.setPopis(pathShow1.getText());
+            picsService.saveOrUpdate(pics);
+        }
+
     }
 
     public void alerted(String headerText) {
@@ -780,13 +798,17 @@ public class UIController implements Initializable {
     public void createUser(ActionEvent actionEvent) throws ParseException {
         if (actionEvent.getSource() == createAcc) {
             Users users = new Users();
-            try {
-                users.setUsername(usernameField.getText());
-                users.setPassword(passwordField.getText());
-                usersService.saveOrUpdate(users);
-                logIn();
-            } catch (Exception e) {
-                alerted("Prosím vyplňte všechna pole!");
+            if (usernameField.getText() == null || passwordField.getText() == null){
+                alerted("ZADEJTE PLATNÉ HODNOTY!");
+            }else {
+                try {
+                    users.setUsername(usernameField.getText());
+                    users.setPassword(passwordField.getText());
+                    usersService.saveOrUpdate(users);
+                    logIn();
+                } catch (Exception e) {
+                    alerted("Prosím vyplňte všechna pole!");
+                }
             }
         }
     }

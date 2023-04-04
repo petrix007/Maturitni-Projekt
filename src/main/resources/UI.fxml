@@ -67,566 +67,6 @@
       </BorderPane>
       <StackPane layoutX="209.0" layoutY="118.0" prefHeight="482.0" prefWidth="599.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="209.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="118.0">
          <children>
-            <ScrollPane fx:id="sbirkasSP" prefHeight="593.0" prefWidth="606.0">
-              <content>
-                <AnchorPane fx:id="anchorSbirky" minHeight="0.0" minWidth="0.0" prefWidth="598.0">
-                     <children>
-                        <Pane fx:id="sbirkas" prefHeight="482.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Button fx:id="searchSbirkaBtn" layoutX="412.0" layoutY="2.0" mnemonicParsing="false" stylesheets="@chooseBtn.css" text="🔍" />
-                              <TextField fx:id="searchSbirkaField" layoutX="101.0" layoutY="2.0" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat sbírku" stylesheets="@styles.css" />
-                           </children>
-                        </Pane>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-            <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label fx:id="usernameLabel" text="Prezdivka: none">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="sbirkaCountLabel" text="Počet Sbírek: none">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="modelCountLabel" text="Počet Modelů: none">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
-               </center>
-               <bottom>
-                  <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOutUser" style="-fx-background-color: #ff5252;" text="ODHLÁSIT SE" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
-                     <BorderPane.margin>
-                        <Insets bottom="10.0" right="50.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
-            </BorderPane>
-            <BorderPane fx:id="pridatObrazek" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
-               <top>
-                  <ImageView fx:id="backFromPridatObrazek" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#ibackFromPridatObrazek" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT">
-                     <image>
-                        <Image url="@Images/left-arrow.png" />
-                     </image>
-                     <BorderPane.margin>
-                        <Insets left="20.0" top="20.0" />
-                     </BorderPane.margin>
-                  </ImageView>
-               </top>
-               <center>
-                  <VBox alignment="CENTER" prefHeight="412.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ImageView fx:id="imageShow" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/nahled.jpg" />
-                           </image>
-                           <VBox.margin>
-                              <Insets bottom="22.0" top="-30.0" />
-                           </VBox.margin>
-                        </ImageView>
-                        <TextField fx:id="pathShow" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0" promptText="Popis obrázku" stylesheets="@styles.css">
-                           <VBox.margin>
-                              <Insets left="-60.0" />
-                           </VBox.margin>
-                        </TextField>
-                        <Button fx:id="chooseFile" mnemonicParsing="false" onAction="#handleClick" prefHeight="20.0" prefWidth="50.0" stylesheets="@chooseBtn.css">
-                           <VBox.margin>
-                              <Insets left="300.0" top="-33.0" />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@Images/chooseFile.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="potvrditBtn" mnemonicParsing="false" onAction="#createObrazek" prefHeight="25.0" prefWidth="142.0" stylesheets="@chooseBtn.css" text="POTVRDIT">
-                           <VBox.margin>
-                              <Insets left="209.0" top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="nextObrAdd" mnemonicParsing="false" onAction="#handleClick" stylesheets="@chooseBtn.css" text="PŘIDAT DALŠÍ OBRÁZEK">
-                           <VBox.margin>
-                              <Insets right="210.0" top="-29.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </center>
-            </BorderPane>
-            <BorderPane fx:id="menu" prefHeight="482.0" prefWidth="541.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <ImageView fx:id="pridatSbirkuMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#sbirkasToFront" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/addSbirkaMenuBtn1.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fx:id="pridatModelMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#modelyToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
-                           <image>
-                              <Image url="@Images/addModelMenuBtn1.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fx:id="pridatObrazekMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#obrCreateToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
-                           <image>
-                              <Image url="@Images/addObrMenuBtn1.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fx:id="sbirkyMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#sbirkySPToFront" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-                           <image>
-                              <Image url="@Images/sbirkyMenuBtn1.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fx:id="modelyShowMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#modelyShowToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <image>
-                              <Image url="@Images/modelyMenuBtn1.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fx:id="profilMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#profilToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <image>
-                              <Image url="@Images/userMenuBtn1.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </GridPane>
-               </center></BorderPane>
-            <BorderPane fx:id="pridatObrazekWithout" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <center>
-                  <VBox alignment="CENTER" prefHeight="412.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label alignment="CENTER" text="Ze Sbírky: ">
-                                 <HBox.margin>
-                                    <Insets right="20.0" top="4.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <ComboBox fx:id="SbirkaObrAddCB" onAction="#ModelyToComboBox" prefWidth="150.0" promptText="Sbírka">
-                                 <HBox.margin>
-                                    <Insets right="20.0" />
-                                 </HBox.margin>
-                              </ComboBox>
-                              <Label alignment="CENTER" text="Jaký Model: ">
-                                 <HBox.margin>
-                                    <Insets right="10.0" top="4.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <ComboBox fx:id="ModelObrAddCB" onAction="#handleClick" prefWidth="150.0" promptText="Model" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                        <ImageView fx:id="imageShow1" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/nahled.jpg" />
-                           </image>
-                           <VBox.margin>
-                              <Insets bottom="22.0" top="-50.0" />
-                           </VBox.margin>
-                        </ImageView>
-                        <HBox alignment="TOP_CENTER" prefHeight="53.0" prefWidth="599.0">
-                           <children>
-                              <Label text="Popis: ">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets right="10.0" top="5.0" />
-                                 </HBox.margin>
-                              </Label>
-                              <TextField fx:id="pathShow1" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0" stylesheets="@styles.css">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </TextField>
-                              <Button fx:id="chooseFile1" mnemonicParsing="false" onAction="#handleClick" prefHeight="20.0" prefWidth="50.0" stylesheets="@chooseBtn.css">
-                                 <graphic>
-                                    <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true">
-                                       <image>
-                                          <Image url="@Images/chooseFile.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                           <VBox.margin>
-                              <Insets top="-10.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Button fx:id="potvrditBtn1" mnemonicParsing="false" onAction="#createObrazekAlone" prefHeight="25.0" prefWidth="142.0" stylesheets="@chooseBtn.css" text="POTVRDIT">
-                           <VBox.margin>
-                              <Insets left="209.0" top="10.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="nextObrAdd1" mnemonicParsing="false" onAction="#handleClick" stylesheets="@chooseBtn.css" text="PŘIDAT DALŠÍ OBRÁZEK">
-                           <VBox.margin>
-                              <Insets right="210.0" top="-29.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </center>
-            </BorderPane>
-            <BorderPane fx:id="login" prefHeight="488.0" prefWidth="595.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
-               <center>
-                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="257.0" prefWidth="456.0" spacing="40.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Přezdívka:" textAlignment="CENTER" textOrigin="CENTER">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="400.0" stylesheets="@styles.css">
-                           <VBox.margin>
-                              <Insets top="-30.0" />
-                           </VBox.margin>
-                        </TextField>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Heslo:" textOrigin="CENTER">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Text>
-                        <PasswordField fx:id="passwordField" prefWidth="400.0" stylesheets="@styles.css">
-                           <VBox.margin>
-                              <Insets top="-30.0" />
-                           </VBox.margin>
-                        </PasswordField>
-                        <CheckBox fx:id="zustanPrihlasenCheckBox" mnemonicParsing="false" stylesheets="@styles.css" text="Zůstat přihlášen">
-                           <padding>
-                              <Insets top="-40.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets right="300.0" />
-                           </VBox.margin>
-                        </CheckBox>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets />
-                     </BorderPane.margin>
-                     <padding>
-                        <Insets top="30.0" />
-                     </padding>
-                  </VBox>
-               </center>
-               <bottom>
-                  <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="loginAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Přihlásit se" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="createAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Vytvořit účet" textAlignment="CENTER" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets left="100.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                  </HBox>
-               </bottom>
-               <top>
-                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                     <image>
-                        <Image url="@Images/usericon.png" />
-                     </image>
-                     <BorderPane.margin>
-                        <Insets top="25.0" />
-                     </BorderPane.margin>
-                  </ImageView>
-               </top>
-            </BorderPane>
-            <BorderPane fx:id="progressBP" prefHeight="200.0" prefWidth="200.0" />
-            <BorderPane fx:id="searchBarModels" prefHeight="597.0" prefWidth="599.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="TOP_CENTER">
-               <top>
-                  <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ComboBox fx:id="vyberSbirkuCB" onAction="#ModelyChoose" prefWidth="150.0" promptText="Vyberte sbírku" stylesheets="@styles.css">
-                           <HBox.margin>
-                              <Insets left="40.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                        <TextField fx:id="searchModelField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" stylesheets="@styles.css">
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button fx:id="searchModelBtn" mnemonicParsing="false" onAction="#DrawResults" stylesheets="@chooseBtn.css" text="🔍">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets top="10.0" />
-                     </BorderPane.margin>
-                  </HBox>
-               </top>
-               <center>
-                  <ScrollPane fx:id="modelySP" minHeight="-Infinity" prefHeight="430.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="598.0">
-                           <children>
-                              <Pane fx:id="sbirkas1" layoutX="3.0" layoutY="6.0" prefHeight="486.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" AnchorPane.bottomAnchor="-49.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="6.0" />
-                              <Pane fx:id="sbirkas11" prefHeight="486.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
-               </center>
-            </BorderPane>
-            <BorderPane fx:id="modelyDetail" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
-               <top>
-                  <HBox prefHeight="56.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <ImageView fx:id="backFromDetail" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#backFromDetail" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Images/left-arrow.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="5.0" top="5.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                  </HBox>
-               </top>
-               <center>
-                  <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="371.0" prefWidth="281.0">
-                           <children>
-                              <Label fx:id="modelNazevDetail" alignment="CENTER" prefHeight="17.0" prefWidth="284.0" text="Label">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <ImageView fx:id="modelDetailImage" fitHeight="272.0" fitWidth="276.0" pickOnBounds="true" preserveRatio="true" />
-                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="281.0">
-                                 <children>
-                                    <ImageView fx:id="arrowPrevObr" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#setImageDetailPrevious" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@Images/left-arrow.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="arrowNextObr" fitHeight="40.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#setImageDetailNext" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@Images/left-arrow.png" />
-                                       </image>
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <VBox fillWidth="false" prefHeight="482.0" prefWidth="320.0">
-                           <children>
-                              <TextArea fx:id="modelPopisArea" editable="false" prefHeight="286.0" prefWidth="309.0">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </TextArea>
-                              <HBox prefHeight="66.0" prefWidth="318.0">
-                                 <children>
-                                    <Label text="Cena: ">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="cenaDetailTxtB" prefHeight="26.0" prefWidth="268.0" text="Kč" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </center>
-               <bottom>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="editModelBtn" mnemonicParsing="false" onAction="#handleClick" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit model">
-                           <HBox.margin>
-                              <Insets right="50.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="editAddObr" mnemonicParsing="false" onAction="#pridatObrEditMode" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Přidat obrázek">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-               </bottom>
-            </BorderPane>
-            <BorderPane fx:id="modelyEditPane" layoutX="10.0" layoutY="9.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
-               <bottom>
-                  <HBox alignment="CENTER" prefHeight="64.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Button fx:id="editModelBtn1" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit model">
-                           <HBox.margin>
-                              <Insets right="50.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="editObrBTN" mnemonicParsing="false" onAction="#pridatObrEditMode" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit obrázky">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-               </bottom>
-               <top>
-                  <VBox prefHeight="78.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <HBox prefHeight="38.0" prefWidth="599.0">
-                           <children>
-                              <ImageView fx:id="backFromDetail1" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#backFromEdit" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets left="5.0" top="5.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="24.0" prefWidth="599.0">
-                           <children>
-                              <Label fx:id="editModelNazevCurrentL" alignment="CENTER" prefHeight="16.0" prefWidth="284.0" text="Current Model" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </top>
-               <center>
-                  <VBox alignment="CENTER" prefHeight="349.0" prefWidth="599.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="15.0" prefHeight="51.0" prefWidth="599.0" spacing="20.0">
-                           <children>
-                              <ComboBox fx:id="editSbirkaCBCurrent" prefHeight="25.0" prefWidth="220.0" promptText="Sbírka" />
-                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                              <ComboBox fx:id="editNewSbirkaCB" prefWidth="220.0" promptText="Vyberte novou značku" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="40.0" prefHeight="51.0" prefWidth="599.0" spacing="20.0">
-                           <children>
-                              <ComboBox fx:id="editZnačkaCurrentCB" prefWidth="220.0" promptText="Značka" />
-                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                              <ComboBox fx:id="editNewZnackaCB" prefWidth="220.0" promptText="Vyberte novou značku" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="58.0" prefWidth="599.0" spacing="20.0">
-                           <children>
-                              <TextField fx:id="editNameCurrentTXTF" editable="false" prefHeight="30.0" prefWidth="220.0" promptText="Název" />
-                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                              <TextField fx:id="editNewNazevTXTF" prefHeight="30.0" prefWidth="220.0" promptText="Nový název" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="91.0" prefHeight="135.0" prefWidth="599.0" spacing="20.0">
-                           <children>
-                              <TextArea fx:id="editPopisCurrentTXTA" editable="false" prefHeight="96.0" prefWidth="220.0" promptText="Popis" />
-                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                              <TextArea fx:id="editNewPopisTXTA" prefHeight="51.0" prefWidth="220.0" promptText="Nový popis" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="599.0" spacing="20.0">
-                           <children>
-                              <TextField fx:id="editCenaCurrentTXTF" editable="false" prefHeight="30.0" prefWidth="220.0" promptText="Cena" />
-                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@Images/left-arrow.png" />
-                                 </image>
-                              </ImageView>
-                              <TextField fx:id="editNewCenaTXTF" prefHeight="30.0" prefWidth="220.0" promptText="Nová cena" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </center>
-            </BorderPane>
             <BorderPane fx:id="pridatSbirku" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
                <center>
                   <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
@@ -810,6 +250,565 @@
                      </image>
                      <BorderPane.margin>
                         <Insets />
+                     </BorderPane.margin>
+                  </ImageView>
+               </top>
+            </BorderPane>
+            <BorderPane fx:id="modelyDetail" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
+               <top>
+                  <HBox prefHeight="56.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="backFromDetail" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#backFromDetail" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/left-arrow.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </top>
+               <center>
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="371.0" prefWidth="281.0">
+                           <children>
+                              <Label fx:id="modelNazevDetail" alignment="CENTER" prefHeight="17.0" prefWidth="284.0" text="Label">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="modelDetailImage" fitHeight="272.0" fitWidth="276.0" pickOnBounds="true" preserveRatio="true" />
+                              <HBox alignment="CENTER" prefHeight="40.0" prefWidth="281.0">
+                                 <children>
+                                    <ImageView fx:id="arrowPrevObr" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#setImageDetailPrevious" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Images/left-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="arrowNextObr" fitHeight="40.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#setImageDetailNext" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Images/left-arrow.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox fillWidth="false" prefHeight="482.0" prefWidth="320.0">
+                           <children>
+                              <TextArea fx:id="modelPopisArea" editable="false" prefHeight="286.0" prefWidth="309.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </TextArea>
+                              <HBox prefHeight="66.0" prefWidth="318.0">
+                                 <children>
+                                    <Label text="Cena: ">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="cenaDetailTxtB" prefHeight="26.0" prefWidth="268.0" text="Kč" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </center>
+               <bottom>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="editModelBtn" mnemonicParsing="false" onAction="#handleClick" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit model">
+                           <HBox.margin>
+                              <Insets right="50.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="editAddObr" mnemonicParsing="false" onAction="#pridatObrEditMode" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Přidat obrázek">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+            <BorderPane fx:id="modelyEditPane" layoutX="10.0" layoutY="9.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <bottom>
+                  <HBox alignment="CENTER" prefHeight="64.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="editModelBtn1" mnemonicParsing="false" onAction="#updateModelParams" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit model">
+                           <HBox.margin>
+                              <Insets right="50.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="editObrBTN" mnemonicParsing="false" onAction="#pridatObrEditMode" prefHeight="40.0" prefWidth="150.0" stylesheets="@chooseBtn.css" text="Upravit obrázky">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </HBox>
+               </bottom>
+               <top>
+                  <VBox prefHeight="78.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox prefHeight="38.0" prefWidth="599.0">
+                           <children>
+                              <ImageView fx:id="backFromDetail1" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#backFromEdit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="24.0" prefWidth="599.0">
+                           <children>
+                              <Label fx:id="editModelNazevCurrentL" alignment="CENTER" prefHeight="16.0" prefWidth="284.0" text="Current Model" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </top>
+               <center>
+                  <VBox alignment="CENTER" prefHeight="349.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="15.0" prefHeight="51.0" prefWidth="599.0" spacing="20.0">
+                           <children>
+                              <ComboBox fx:id="editSbirkaCBCurrent" prefHeight="25.0" prefWidth="220.0" promptText="Sbírka" />
+                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <ComboBox fx:id="editNewSbirkaCB" prefWidth="220.0" promptText="Vyberte novou značku" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="40.0" prefHeight="51.0" prefWidth="599.0" spacing="20.0">
+                           <children>
+                              <ComboBox fx:id="editZnačkaCurrentCB" prefWidth="220.0" promptText="Značka" />
+                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <ComboBox fx:id="editNewZnackaCB" prefWidth="220.0" promptText="Vyberte novou značku" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="58.0" prefWidth="599.0" spacing="20.0">
+                           <children>
+                              <TextField fx:id="editNameCurrentTXTF" editable="false" prefHeight="30.0" prefWidth="220.0" promptText="Název" />
+                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField fx:id="editNewNazevTXTF" prefHeight="30.0" prefWidth="220.0" promptText="Nový název" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="91.0" prefHeight="135.0" prefWidth="599.0" spacing="20.0">
+                           <children>
+                              <TextArea fx:id="editPopisCurrentTXTA" editable="false" prefHeight="96.0" prefWidth="220.0" promptText="Popis" />
+                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <TextArea fx:id="editNewPopisTXTA" prefHeight="51.0" prefWidth="220.0" promptText="Nový popis" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="599.0" spacing="20.0">
+                           <children>
+                              <TextField fx:id="editCenaCurrentTXTF" editable="false" prefHeight="30.0" prefWidth="220.0" promptText="Cena" />
+                              <ImageView fitHeight="50.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Images/left-arrow.png" />
+                                 </image>
+                              </ImageView>
+                              <TextField fx:id="editNewCenaTXTF" prefHeight="30.0" prefWidth="220.0" promptText="Nová cena" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="searchBarModels" prefHeight="597.0" prefWidth="599.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="TOP_CENTER">
+               <top>
+                  <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ComboBox fx:id="vyberSbirkuCB" onAction="#ModelyChoose" prefWidth="150.0" promptText="Vyberte sbírku" stylesheets="@styles.css">
+                           <HBox.margin>
+                              <Insets left="40.0" />
+                           </HBox.margin>
+                        </ComboBox>
+                        <TextField fx:id="searchModelField" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat model" stylesheets="@styles.css">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="searchModelBtn" mnemonicParsing="false" onAction="#DrawResults" stylesheets="@chooseBtn.css" text="🔍">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets top="10.0" />
+                     </BorderPane.margin>
+                  </HBox>
+               </top>
+               <center>
+                  <ScrollPane fx:id="modelySP" minHeight="-Infinity" prefHeight="430.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="598.0">
+                           <children>
+                              <Pane fx:id="sbirkas1" layoutX="3.0" layoutY="6.0" prefHeight="486.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" AnchorPane.bottomAnchor="-49.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="6.0" />
+                              <Pane fx:id="sbirkas11" prefHeight="486.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="loggedUser" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="usernameLabel" alignment="CENTER" text="Prezdivka: none" textAlignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="sbirkaCountLabel" text="Počet Sbírek: none">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="modelCountLabel" text="Počet Modelů: none">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </center>
+               <bottom>
+                  <Button fx:id="logOutBtn" mnemonicParsing="false" onAction="#logOutUser" style="-fx-background-color: #ff5252;" text="ODHLÁSIT SE" textFill="WHITE" BorderPane.alignment="CENTER_RIGHT">
+                     <BorderPane.margin>
+                        <Insets bottom="10.0" right="50.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </bottom>
+            </BorderPane>
+            <ScrollPane fx:id="sbirkasSP" prefHeight="593.0" prefWidth="606.0">
+              <content>
+                <AnchorPane fx:id="anchorSbirky" minHeight="0.0" minWidth="0.0" prefWidth="598.0">
+                     <children>
+                        <Pane fx:id="sbirkas" prefHeight="482.0" prefWidth="592.0" style="-fx-background-color: #F3F3F3;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button fx:id="searchSbirkaBtn" layoutX="412.0" layoutY="2.0" mnemonicParsing="false" stylesheets="@chooseBtn.css" text="🔍" />
+                              <TextField fx:id="searchSbirkaField" layoutX="101.0" layoutY="2.0" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" promptText="Vyhledat sbírku" stylesheets="@styles.css" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <BorderPane fx:id="pridatObrazek" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
+               <top>
+                  <ImageView fx:id="backFromPridatObrazek" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#ibackFromPridatObrazek" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT">
+                     <image>
+                        <Image url="@Images/left-arrow.png" />
+                     </image>
+                     <BorderPane.margin>
+                        <Insets left="20.0" top="20.0" />
+                     </BorderPane.margin>
+                  </ImageView>
+               </top>
+               <center>
+                  <VBox alignment="CENTER" prefHeight="412.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="imageShow" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/chooseFile.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="22.0" top="-30.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <TextField fx:id="pathShow" alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0" promptText="Popis obrázku" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets left="-60.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Button fx:id="chooseFile" mnemonicParsing="false" onAction="#handleClick" prefHeight="20.0" prefWidth="50.0" stylesheets="@chooseBtn.css">
+                           <VBox.margin>
+                              <Insets left="300.0" top="-33.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@Images/chooseFile.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="potvrditBtn" mnemonicParsing="false" onAction="#createObrazek" prefHeight="25.0" prefWidth="142.0" stylesheets="@chooseBtn.css" text="POTVRDIT">
+                           <VBox.margin>
+                              <Insets left="209.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="nextObrAdd" mnemonicParsing="false" onAction="#handleClick" stylesheets="@chooseBtn.css" text="PŘIDAT DALŠÍ OBRÁZEK">
+                           <VBox.margin>
+                              <Insets right="210.0" top="-29.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="pridatObrazekWithout" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <VBox alignment="CENTER" prefHeight="412.0" prefWidth="599.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label alignment="CENTER" text="Ze Sbírky: ">
+                                 <HBox.margin>
+                                    <Insets right="20.0" top="4.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="SbirkaObrAddCB" onAction="#ModelyToComboBox" prefWidth="150.0" promptText="Sbírka">
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <Label alignment="CENTER" text="Jaký Model: ">
+                                 <HBox.margin>
+                                    <Insets right="10.0" top="4.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="ModelObrAddCB" onAction="#handleClick" prefWidth="150.0" promptText="Model" />
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <ImageView fx:id="imageShow1" fitHeight="291.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/chooseFile.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets bottom="22.0" top="-50.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <HBox alignment="TOP_CENTER" prefHeight="53.0" prefWidth="599.0">
+                           <children>
+                              <Label text="Popis: ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="10.0" top="5.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="pathShow1" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="33.0" prefWidth="300.0" stylesheets="@styles.css">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="chooseFile1" mnemonicParsing="false" onAction="#handleClick" prefHeight="20.0" prefWidth="50.0" stylesheets="@chooseBtn.css">
+                                 <graphic>
+                                    <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true">
+                                       <image>
+                                          <Image url="@Images/chooseFile.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="-10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Button fx:id="potvrditBtn1" mnemonicParsing="false" onAction="#createObrazekAlone" prefHeight="25.0" prefWidth="142.0" stylesheets="@chooseBtn.css" text="POTVRDIT">
+                           <VBox.margin>
+                              <Insets left="209.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="nextObrAdd1" mnemonicParsing="false" onAction="#handleClick" stylesheets="@chooseBtn.css" text="PŘIDAT DALŠÍ OBRÁZEK">
+                           <VBox.margin>
+                              <Insets right="210.0" top="-29.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+            <BorderPane fx:id="menu" prefHeight="482.0" prefWidth="541.0" style="-fx-background-color: #F3F3F3;">
+               <center>
+                  <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <ImageView fx:id="pridatSbirkuMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#sbirkasToFront" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Images/addSbirkaMenuBtn1.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pridatModelMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#modelyToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                           <image>
+                              <Image url="@Images/addModelMenuBtn1.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="pridatObrazekMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#obrCreateToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                           <image>
+                              <Image url="@Images/addObrMenuBtn1.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="sbirkyMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#sbirkySPToFront" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@Images/sbirkyMenuBtn1.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="modelyShowMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#modelyShowToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@Images/modelyMenuBtn1.png" />
+                           </image>
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ImageView>
+                        <ImageView fx:id="profilMenuBtn" fitHeight="190.0" fitWidth="200.0" onMouseClicked="#profilToFront" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@Images/userMenuBtn1.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+               </center></BorderPane>
+            <BorderPane fx:id="login" prefHeight="488.0" prefWidth="595.0" style="-fx-background-color: #F3F3F3;" StackPane.alignment="CENTER">
+               <center>
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="257.0" prefWidth="456.0" spacing="40.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Přezdívka:" textAlignment="CENTER" textOrigin="CENTER">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="400.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets top="-30.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Heslo:" textOrigin="CENTER">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <PasswordField fx:id="passwordField" prefWidth="400.0" stylesheets="@styles.css">
+                           <VBox.margin>
+                              <Insets top="-30.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                        <CheckBox fx:id="zustanPrihlasenCheckBox" mnemonicParsing="false" stylesheets="@styles.css" text="Zůstat přihlášen">
+                           <padding>
+                              <Insets top="-40.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets right="300.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </VBox>
+               </center>
+               <bottom>
+                  <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="loginAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#loginUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Přihlásit se" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="createAcc" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#createUser" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #0598FF;" stylesheets="@applyBtn.css" text="Vytvořit účet" textAlignment="CENTER" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="100.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </bottom>
+               <top>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@Images/usericon.png" />
+                     </image>
+                     <BorderPane.margin>
+                        <Insets top="25.0" />
                      </BorderPane.margin>
                   </ImageView>
                </top>

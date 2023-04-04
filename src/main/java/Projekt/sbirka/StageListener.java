@@ -4,6 +4,7 @@ import Projekt.sbirka.StageReadyEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,8 @@ public class StageListener implements ApplicationListener<Projekt.sbirka.StageRe
             stage.setScene(scene);
             stage.setResizable(true);
             stage.setTitle(this.applicationTitle);
+            Image image = new Image("Images/iconka1.png");
+            stage.getIcons().add(image);
             stage.initStyle(StageStyle.UNDECORATED);
             root.setOnMousePressed (evt ->{
                 x.set(evt.getSceneX());
